@@ -8,7 +8,7 @@ import ThirdSection from "./ThirdSection";
 import StatsSection from "./StatsSection";
 import FourthSection from "./FourthSection";
 import FifthSection from "./FifthSection";
-import BrandSection from "./BrandSection"
+
 
 
 const Hero: React.FC = () => {
