@@ -4,37 +4,28 @@ import Footer from "../Footer";
 import FirstHeroSection from "./FirstSection";
 import SecondSection from "./SecondSection";
 import ThirdSection from "./ThirdSection";
-import StatsSection from "./StatsSection";
 import FourthSection from "./FourthSection";
 import FifthSection from "./FifthSection";
-import GradientMesh from "../../lib/GradientMesh";
+import StatsSection from "./StatsSection";
 
 const Hero: React.FC = () => {
   return (
-    <>
-      {/* Global animated gradient background — fixed behind all content */}
-      <div
-        style={{
-          position: "fixed",
-          inset: 0,
-          zIndex: -1,
-          pointerEvents: "none",
-        }}
-      >
-        <GradientMesh colors={["#fde8e1", "#e8e6ff", "#d4f0e8"]} />
-      </div>
-
-      <div style={{ minHeight: "100vh", paddingTop: "40px" }}>
-        <Header />
-        <FirstHeroSection />
-        <SecondSection />
-        <ThirdSection />
-        <FourthSection />
-        <FifthSection />
-        <StatsSection />
-        <Footer />
-      </div>
-    </>
+    <div style={{ background: "#ffffff" }}>
+      <Header />
+      {/* Hero — white with vivid blobs + 3D */}
+      <FirstHeroSection />
+      {/* Features — white */}
+      <SecondSection />
+      {/* Services — white, magazine list */}
+      <ThirdSection />
+      {/* Process — dark (#0f0e0d) */}
+      <FourthSection />
+      {/* Why Us — white with video */}
+      <FifthSection />
+      {/* Stats — dark (#0f0e0d) */}
+      <StatsSection />
+      <Footer />
+    </div>
   );
 };
 

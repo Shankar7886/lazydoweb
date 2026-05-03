@@ -1,225 +1,238 @@
 import { motion, useInView, useMotionValue, animate } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import TiltCard from "../../lib/TiltCard";
 
-// Stats data with luxury-focused metrics
 const stats = [
-  { number: 150, label: "Premium Projects", suffix: "+", icon: "⟡" },
-  { number: 99, label: "Client Satisfaction", suffix: "%", icon: "⟡" },
-  { number: 24, label: "Concierge Support", suffix: "/7", icon: "⟡" },
-  { number: 15, label: "Years Excellence", suffix: "+", icon: "⟡" },
+  { number: 150, suffix: "+", label: "Projects Delivered", desc: "across web, mobile & enterprise" },
+  { number: 99, suffix: "%", label: "Client Satisfaction", desc: "measured through NPS surveys" },
+  { number: 24, suffix: "/7", label: "Support Coverage", desc: "zero downtime commitment" },
+  { number: 15, suffix: "+", label: "Years of Excellence", desc: "building products that last" },
 ];
 
-// Animated Counter Component
-function AnimatedCounter({
-  value,
-  suffix = "",
-  icon,
-}: {
-  value: number;
-  suffix?: string;
-  icon: string;
-}) {
+function Counter({ value, suffix }: { value: number; suffix: string }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
-  const motionValue = useMotionValue(0);
-  const [displayValue, setDisplayValue] = useState(0);
+  const mv = useMotionValue(0);
+  const [display, setDisplay] = useState(0);
 
   useEffect(() => {
-    if (inView) {
-      const controls = animate(motionValue, value, {
-        duration: 2.8,
-        ease: [0.16, 1, 0.3, 1],
-        onUpdate(latest) {
-          setDisplayValue(Math.round(latest));
-        },
-      });
-      return () => controls.stop();
-    }
-  }, [inView, value, motionValue]);
+    if (!inView) return;
+    const ctrl = animate(mv, value, {
+      duration: 2.4,
+      ease: [0.16, 1, 0.3, 1],
+      onUpdate: (v) => setDisplay(Math.round(v)),
+    });
+    return () => ctrl.stop();
+  }, [inView, value, mv]);
 
   return (
-    <div ref={ref} className="relative flex flex-col items-center">
-      <motion.div
-        className="relative mb-3"
-        initial={{ scale: 0.5, opacity: 0 }}
-        animate={inView ? { scale: 1, opacity: 1 } : {}}
-        transition={{ duration: 1, delay: 0.4 }}
-      >
-        <div className="text-4xl md:text-5xl font-thin text-neutral-800 tracking-tight">
-          {displayValue}
-          <span className="ml-1" style={{ color: "var(--color-accent-primary)" }}>
-            {suffix}
-          </span>
-        </div>
-
-        <motion.div
-          className="absolute -top-6 -right-6 text-xl opacity-70"
-          style={{ color: "var(--color-accent-primary)" }}
-          initial={{ rotate: -45, opacity: 0 }}
-          animate={inView ? { rotate: 0, opacity: 0.7 } : {}}
-          transition={{ duration: 1.5, delay: 0.6 }}
-        >
-          {icon}
-        </motion.div>
-      </motion.div>
-    </div>
+    <span ref={ref} style={{ fontVariantNumeric: "tabular-nums" }}>
+      {display}
+      <span style={{ color: "var(--color-accent-warm)" }}>{suffix}</span>
+    </span>
   );
 }
 
-// Main Section
-export default function LuxuryStatsSection() {
+export default function StatsSection() {
   return (
-    <div className="mesh-bg relative py-12 px-6 overflow-hidden">
-      {/* Header Section */}
-      <motion.div
-        className="text-center mb-12"
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1 }}
+    <section
+      style={{
+        background: "var(--color-ink-900)",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      {/* Subtle gradient bleed */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          top: "-40%",
+          left: "-10%",
+          width: "60%",
+          height: "200%",
+          background:
+            "radial-gradient(ellipse, rgba(200,57,43,0.08) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          bottom: "-40%",
+          right: "-10%",
+          width: "50%",
+          height: "200%",
+          background:
+            "radial-gradient(ellipse, rgba(124,110,234,0.07) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }}
+      />
+
+      <div
+        style={{
+          maxWidth: "1400px",
+          margin: "0 auto",
+          padding: "5rem 3rem",
+          position: "relative",
+          zIndex: 1,
+        }}
       >
+        {/* Eyebrow */}
         <motion.div
-          className="inline-flex items-center gap-4 mb-4"
-          initial={{ width: 0 }}
-          whileInView={{ width: "auto" }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 1.2, delay: 0.3 }}
+          transition={{ duration: 0.7 }}
+          style={{
+            marginBottom: "3rem",
+            display: "flex",
+            alignItems: "center",
+            gap: "1rem",
+          }}
         >
           <div
-            className="w-8 h-px bg-gradient-to-r from-transparent"
             style={{
+              width: 32,
+              height: 1,
               background:
-                "linear-gradient(to right, transparent, var(--color-accent-warm), var(--color-accent-primary))",
+                "linear-gradient(90deg, transparent, var(--color-accent-warm))",
             }}
           />
           <span
-            className="text-xs font-medium tracking-[0.3em] uppercase"
-            style={{ color: "var(--color-accent-primary)" }}
-          >
-            Distinction
-          </span>
-          <div
-            className="w-8 h-px"
             style={{
-              background:
-                "linear-gradient(to right, var(--color-accent-primary), var(--color-accent-warm), transparent)",
+              fontSize: "0.7rem",
+              fontWeight: 700,
+              letterSpacing: "0.3em",
+              textTransform: "uppercase",
+              color: "var(--color-accent-warm)",
             }}
-          />
+          >
+            By The Numbers
+          </span>
         </motion.div>
 
-        <h2 className="text-3xl md:text-4xl font-extralight text-neutral-800 tracking-tight leading-tight">
-          Where{" "}
-          <span
-            className="font-light italic"
-            style={{ color: "var(--color-accent-primary)" }}
-          >
-            Excellence
-          </span>{" "}
-          Meets Innovation
-        </h2>
-      </motion.div>
-
-      {/* Stats Container */}
-      <div className="relative max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-4">
-          {stats.map((stat, index) => (
+        {/* Stats grid */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gap: "0",
+          }}
+        >
+          {stats.map((stat, i) => (
             <motion.div
-              key={index}
-              className="group relative flex flex-col items-center"
-              initial={{ opacity: 0, y: 80 }}
+              key={i}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 1, delay: index * 0.15 }}
+              transition={{ duration: 0.8, delay: i * 0.12 }}
+              style={{
+                padding: "2rem 2.5rem 2rem 0",
+                borderRight:
+                  i < stats.length - 1
+                    ? "1px solid rgba(255,255,255,0.07)"
+                    : "none",
+                paddingRight: i < stats.length - 1 ? "2.5rem" : 0,
+                paddingLeft: i > 0 ? "2.5rem" : 0,
+              }}
             >
-              {/* Vertical Divider */}
-              {index < stats.length - 1 && (
-                <div className="hidden md:block absolute right-0 top-1/2 transform -translate-y-1/2 w-px h-32 bg-gradient-to-b from-transparent via-stone-300 to-transparent" />
-              )}
+              {/* Number */}
+              <div
+                style={{
+                  fontSize: "clamp(3.5rem, 6vw, 6rem)",
+                  fontWeight: 100,
+                  lineHeight: 1,
+                  color: "#ffffff",
+                  letterSpacing: "-0.04em",
+                  marginBottom: "1rem",
+                }}
+              >
+                <Counter value={stat.number} suffix={stat.suffix} />
+              </div>
 
-              <TiltCard glareEffect>
-                <div className="glass-card rounded-2xl p-8 text-center w-full">
-                  {/* Top Decorative Line */}
-                  <motion.div
-                    className="w-12 h-px mx-auto mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                    style={{
-                      background:
-                        "linear-gradient(to right, transparent, var(--color-accent-warm), transparent)",
-                    }}
-                    initial={{ scaleX: 0 }}
-                    whileInView={{ scaleX: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 1, delay: 1 + index * 0.1 }}
-                  />
+              {/* Label */}
+              <div
+                style={{
+                  fontSize: "1rem",
+                  fontWeight: 500,
+                  color: "rgba(255,255,255,0.8)",
+                  letterSpacing: "0.01em",
+                  marginBottom: "0.4rem",
+                }}
+              >
+                {stat.label}
+              </div>
 
-                  {/* Stat Content */}
-                  <div className="relative z-10">
-                    <AnimatedCounter
-                      value={stat.number}
-                      suffix={stat.suffix}
-                      icon={stat.icon}
-                    />
-
-                    <motion.div
-                      className="mt-3 text-neutral-600 font-light text-sm md:text-base tracking-wide"
-                      initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.8, delay: 1.2 + index * 0.1 }}
-                    >
-                      {stat.label}
-                    </motion.div>
-                  </div>
-
-                  {/* Bottom Decorative Element */}
-                  <motion.div
-                    className="mt-4 flex justify-center"
-                    initial={{ opacity: 0, scale: 0 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 1.4 + index * 0.1 }}
-                  >
-                    <div
-                      className="w-1 h-1 rounded-full opacity-60 group-hover:opacity-100 transition-opacity duration-300"
-                      style={{ backgroundColor: "var(--color-accent-warm)" }}
-                    />
-                  </motion.div>
-                </div>
-              </TiltCard>
+              {/* Description */}
+              <div
+                style={{
+                  fontSize: "0.78rem",
+                  color: "rgba(255,255,255,0.35)",
+                  fontWeight: 300,
+                  letterSpacing: "0.02em",
+                }}
+              >
+                {stat.desc}
+              </div>
             </motion.div>
           ))}
         </div>
-      </div>
 
-      {/* Bottom Signature Element */}
-      <motion.div
-        className="flex justify-center mt-20"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1, delay: 1.8 }}
-      >
-        <div className="flex items-center gap-6">
-          <div
-            className="w-12 h-px"
+        {/* Bottom CTA strip */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: 0.7 }}
+          style={{
+            marginTop: "4rem",
+            paddingTop: "2.5rem",
+            borderTop: "1px solid rgba(255,255,255,0.07)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: "1rem",
+          }}
+        >
+          <p
             style={{
-              background:
-                "linear-gradient(to right, transparent, var(--color-accent-warm), var(--color-accent-gold))",
+              fontSize: "1.15rem",
+              fontWeight: 200,
+              color: "rgba(255,255,255,0.55)",
+              letterSpacing: "0.01em",
+              maxWidth: 500,
             }}
-          />
-          <div
-            className="w-3 h-3 border rounded-full bg-white shadow-sm"
-            style={{ borderColor: "var(--color-accent-warm)" }}
-          />
-          <div
-            className="w-12 h-px"
+          >
+            Numbers that reflect our commitment to engineering excellence and client success.
+          </p>
+          <motion.a
+            href="/contact"
+            data-cursor="hover"
             style={{
-              background:
-                "linear-gradient(to right, var(--color-accent-gold), var(--color-accent-warm), transparent)",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.6rem",
+              padding: "0.8rem 1.8rem",
+              borderRadius: "50px",
+              border: "1px solid rgba(255,255,255,0.15)",
+              color: "rgba(255,255,255,0.8)",
+              fontSize: "0.85rem",
+              fontWeight: 500,
+              textDecoration: "none",
+              letterSpacing: "0.04em",
+              transition: "all 0.3s",
             }}
-          />
-        </div>
-      </motion.div>
-    </div>
+            whileHover={{
+              borderColor: "rgba(255,255,255,0.4)",
+              color: "#ffffff",
+            }}
+          >
+            Let's work together →
+          </motion.a>
+        </motion.div>
+      </div>
+    </section>
   );
 }

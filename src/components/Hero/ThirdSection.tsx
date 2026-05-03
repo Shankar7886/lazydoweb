@@ -1,163 +1,310 @@
-import React from "react";
-import {
-  Code,
-  Globe,
-  Smartphone,
-  Palette,
-  Shield,
-  Headphones,
-  ArrowRight,
-} from "lucide-react";
-import { motion } from "framer-motion";
-import TiltCard from "../../lib/TiltCard";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import ScrollReveal from "../../lib/ScrollReveal";
 
-interface Service {
-  title: string;
-  subtitle: string;
-  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  gradient: string;
-}
-
-const services: Service[] = [
+const services = [
   {
+    num: "01",
     title: "Custom Software Development",
-    subtitle:
-      "Enterprise-grade solutions built with precision engineering and scalable architecture.",
-    icon: Code,
-    gradient: "from-blue-500 to-blue-600",
+    tagline: "Enterprise-grade. Battle-tested.",
+    desc: "We architect and build bespoke software systems that solve complex business problems — from ERP platforms to AI-powered workflows.",
+    tags: ["Architecture", "Scalability", "API Design"],
+    href: "/Services/customWebDevlopment",
+    accent: "#c8392b",
   },
   {
+    num: "02",
     title: "Web Development",
-    subtitle:
-      "Modern, responsive web applications that deliver exceptional user experiences.",
-    icon: Globe,
-    gradient: "from-emerald-500 to-emerald-600",
+    tagline: "Fast. Beautiful. Accessible.",
+    desc: "Modern React and Next.js applications built for performance, SEO, and delightful user experiences across every device.",
+    tags: ["React", "Next.js", "Performance"],
+    href: "/Services/WebDevlopment",
+    accent: "#7c6eea",
   },
   {
+    num: "03",
     title: "Mobile Applications",
-    subtitle:
-      "Native and cross-platform mobile solutions for iOS and Android ecosystems.",
-    icon: Smartphone,
-    gradient: "from-purple-500 to-purple-600",
+    tagline: "Native quality. Cross-platform reach.",
+    desc: "iOS and Android apps that feel native, perform flawlessly, and keep users coming back — built with React Native.",
+    tags: ["React Native", "iOS", "Android"],
+    href: "/Services/mobilebDevlopment",
+    accent: "#059669",
   },
   {
-    title: "UI/UX Design",
-    subtitle:
-      "Human-centered design that transforms complex workflows into intuitive experiences.",
-    icon: Palette,
-    gradient: "from-pink-500 to-rose-600",
+    num: "04",
+    title: "E-Commerce Development",
+    tagline: "Convert browsers into buyers.",
+    desc: "High-converting shopping experiences with real-time inventory, payment gateways, and seamless checkout flows.",
+    tags: ["Shopify", "WooCommerce", "Payments"],
+    href: "/Services/onlineShoppingAppDevlopment",
+    accent: "#d97706",
   },
   {
-    title: "Quality Assurance",
-    subtitle:
-      "Comprehensive testing strategies ensuring reliability and performance excellence.",
-    icon: Shield,
-    gradient: "from-amber-500 to-orange-600",
+    num: "05",
+    title: "CRM & DMS Systems",
+    tagline: "Relationships managed. Documents mastered.",
+    desc: "Custom CRM and document management platforms that streamline operations and give your team superpowers.",
+    tags: ["CRM", "Automation", "Workflows"],
+    href: "/Services/CrmSoftwareDvelopment",
+    accent: "#0891b2",
   },
   {
-    title: "Technical Support",
-    subtitle:
-      "Proactive monitoring and rapid response support for mission-critical systems.",
-    icon: Headphones,
-    gradient: "from-cyan-500 to-blue-600",
+    num: "06",
+    title: "Digital Marketing",
+    tagline: "Visible. Measurable. Impactful.",
+    desc: "SEO, SEM, and social campaigns engineered from data — not guesswork. We grow your audience and convert them.",
+    tags: ["SEO", "SEM", "Analytics"],
+    href: "/Services/DigitalMarketing",
+    accent: "#9333ea",
   },
 ];
 
-export default function ElegantDigitalPartner() {
+function ServiceRow({ service, index }: { service: typeof services[0]; index: number }) {
+  const [hovered, setHovered] = useState(false);
+  const navigate = useNavigate();
+
   return (
-    <section
-      id="services"
-      className="relative min-h-screen py-20 px-6 overflow-hidden"
-      style={{ background: "transparent" }}
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.65, delay: index * 0.07, ease: [0.25, 0.46, 0.45, 0.94] }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onClick={() => navigate(service.href)}
+      data-cursor="hover"
+      style={{
+        display: "grid",
+        gridTemplateColumns: "80px 1fr auto",
+        alignItems: "center",
+        gap: "2rem",
+        padding: "1.75rem 0",
+        borderBottom: "1px solid rgba(15,14,13,0.07)",
+        cursor: "pointer",
+        position: "relative",
+        overflow: "hidden",
+      }}
     >
-      <div className="relative z-10 max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <ScrollReveal direction="up">
-            <div className="flex items-center justify-center mb-3">
-              <div className="w-12 h-px bg-gradient-to-r from-transparent via-blue-400 to-transparent" />
-              <div className="mx-3 w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full" />
-              <div className="w-12 h-px bg-gradient-to-r from-transparent via-purple-400 to-transparent" />
-            </div>
+      {/* Hover fill */}
+      <motion.div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: `linear-gradient(135deg, ${service.accent}06 0%, ${service.accent}03 100%)`,
+          borderRadius: "12px",
+          pointerEvents: "none",
+        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: hovered ? 1 : 0 }}
+        transition={{ duration: 0.3 }}
+      />
 
-            <h2 className="text-5xl md:text-6xl font-thin text-gray-900 tracking-tight leading-tight">
-              Your Trusted{" "}
-              <motion.span
-                style={{
-                  display: "inline-block",
-                  background:
-                    "linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-warm))",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                }}
-                animate={{ opacity: [0.85, 1, 0.85] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              >
-                Digital Partner
-              </motion.span>
-            </h2>
+      {/* Number */}
+      <div
+        style={{
+          fontSize: "0.75rem",
+          fontWeight: 700,
+          letterSpacing: "0.1em",
+          color: hovered ? service.accent : "var(--color-ink-300)",
+          transition: "color 0.3s",
+          fontVariantNumeric: "tabular-nums",
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
+        {service.num}
+      </div>
 
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed font-light mt-4">
-              We craft exceptional digital experiences through innovative
-              technology, thoughtful design, and strategic expertise.
-            </p>
-          </ScrollReveal>
+      {/* Title + expanded content */}
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "baseline",
+            gap: "1.25rem",
+            flexWrap: "wrap",
+          }}
+        >
+          <span
+            style={{
+              fontSize: "clamp(1.2rem, 2.5vw, 1.75rem)",
+              fontWeight: 300,
+              letterSpacing: "-0.02em",
+              color: hovered ? "var(--color-ink-900)" : "var(--color-ink-700)",
+              transition: "color 0.3s",
+            }}
+          >
+            {service.title}
+          </span>
+          <span
+            style={{
+              fontSize: "0.8rem",
+              color: "var(--color-ink-300)",
+              fontWeight: 400,
+              fontStyle: "italic",
+            }}
+          >
+            {service.tagline}
+          </span>
         </div>
 
-        {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {services.map((service, index) => (
-            <ScrollReveal key={index} direction="up" delay={index * 0.1}>
-              <TiltCard>
-                <div className="glass-card rounded-2xl p-6 h-80 flex flex-col items-center justify-center text-center relative group">
-                  {/* Gradient accent bar */}
-                  <div
-                    className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${service.gradient} rounded-t-2xl`}
-                  />
-
-                  {/* Icon */}
-                  <motion.div
-                    className={`mb-6 p-4 rounded-2xl bg-gradient-to-r ${service.gradient} shadow-lg`}
-                    whileHover="hover"
+        <AnimatePresence>
+          {hovered && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+            >
+              <p
+                style={{
+                  marginTop: "0.6rem",
+                  fontSize: "0.9rem",
+                  color: "var(--color-ink-500)",
+                  fontWeight: 300,
+                  lineHeight: 1.7,
+                  maxWidth: 600,
+                }}
+              >
+                {service.desc}
+              </p>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "0.5rem",
+                  marginTop: "0.75rem",
+                  flexWrap: "wrap",
+                }}
+              >
+                {service.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    style={{
+                      fontSize: "0.68rem",
+                      fontWeight: 600,
+                      letterSpacing: "0.12em",
+                      textTransform: "uppercase",
+                      padding: "0.25rem 0.7rem",
+                      borderRadius: "50px",
+                      background: `${service.accent}12`,
+                      color: service.accent,
+                      border: `1px solid ${service.accent}25`,
+                    }}
                   >
-                    <motion.div
-                      variants={{
-                        hover: {
-                          rotate: 360,
-                          transition: { duration: 0.5 },
-                        },
-                      }}
-                    >
-                      <service.icon className="w-8 h-8 text-white" />
-                    </motion.div>
-                  </motion.div>
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
 
-                  {/* Title */}
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4 group-hover:text-gray-700 transition-colors">
-                    {service.title}
-                  </h3>
+      {/* Arrow */}
+      <motion.div
+        style={{
+          width: 40,
+          height: 40,
+          borderRadius: "50%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          border: `1px solid ${hovered ? service.accent : "rgba(15,14,13,0.1)"}`,
+          color: hovered ? service.accent : "var(--color-ink-300)",
+          flexShrink: 0,
+          position: "relative",
+          zIndex: 1,
+          transition: "border-color 0.3s, color 0.3s",
+        }}
+        animate={{ rotate: hovered ? 45 : 0 }}
+        transition={{ duration: 0.3 }}
+      >
+        <ArrowUpRight size={16} strokeWidth={1.5} />
+      </motion.div>
+    </motion.div>
+  );
+}
 
-                  {/* Description */}
-                  <p className="text-gray-600 text-sm leading-relaxed flex-grow">
-                    {service.subtitle}
-                  </p>
+export default function ServicesListSection() {
+  return (
+    <section
+      style={{
+        background: "#ffffff",
+        position: "relative",
+        padding: "6rem 0",
+      }}
+    >
+      <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "0 3rem" }}>
+        {/* Header */}
+        <ScrollReveal direction="up">
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "space-between",
+              marginBottom: "3rem",
+              paddingBottom: "2rem",
+              borderBottom: "1px solid rgba(15,14,13,0.07)",
+              gap: "2rem",
+              flexWrap: "wrap",
+            }}
+          >
+            <div>
+              <div
+                style={{
+                  fontSize: "0.7rem",
+                  fontWeight: 700,
+                  letterSpacing: "0.25em",
+                  textTransform: "uppercase",
+                  color: "var(--color-accent-primary)",
+                  marginBottom: "0.75rem",
+                }}
+              >
+                What We Build
+              </div>
+              <h2
+                style={{
+                  fontSize: "clamp(2.5rem, 5vw, 4.5rem)",
+                  fontWeight: 100,
+                  lineHeight: 1.05,
+                  letterSpacing: "-0.03em",
+                  color: "var(--color-ink-900)",
+                }}
+              >
+                Services that{" "}
+                <span
+                  style={{
+                    background:
+                      "linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-warm))",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  scale
+                </span>
+              </h2>
+            </div>
+            <p
+              style={{
+                fontSize: "1rem",
+                color: "var(--color-ink-500)",
+                fontWeight: 300,
+                maxWidth: 340,
+                lineHeight: 1.7,
+              }}
+            >
+              From concept to deployment — we engineer digital solutions that grow with your business.
+            </p>
+          </div>
+        </ScrollReveal>
 
-                  {/* Arrow on hover */}
-                  <motion.div
-                    className="absolute bottom-6 right-6"
-                    initial={{ opacity: 0, x: 8 }}
-                    whileHover={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <ArrowRight
-                      className="w-5 h-5"
-                      style={{ color: "var(--color-accent-primary)" }}
-                    />
-                  </motion.div>
-                </div>
-              </TiltCard>
-            </ScrollReveal>
+        {/* Service rows */}
+        <div>
+          {services.map((svc, i) => (
+            <ServiceRow key={svc.num} service={svc} index={i} />
           ))}
         </div>
       </div>
