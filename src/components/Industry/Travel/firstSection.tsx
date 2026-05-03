@@ -1,20 +1,21 @@
-import  { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-// import travelPic from '../../../assets/travel2.jpg';
 import ImageHostLink from '../../../variable';
+import GradientMesh from '../../../lib/GradientMesh';
+import TiltCard from '../../../lib/TiltCard';
+import { useMagneticButton } from '../../../lib/useMagneticButton';
+import useGoToContactPage from '../../Contact/contactFn';
 
 export default function CustomWebDevPage() {
   const gradientRef = useRef<HTMLDivElement | null>(null);
+  const goContact = useGoToContactPage();
+  const magnetic = useMagneticButton();
 
   useEffect(() => {
     const handleMouseMove = () => {
       if (gradientRef.current) {
-        // const rect = gradientRef.current.getBoundingClientRect();
-        // const x = ((e.clientX - rect.left) / rect.width) * 100;
-        // const y = ((e.clientY - rect.top) / rect.height) * 100;
-
         gradientRef.current.style.background = `
-          linear-gradient(135deg, 
+          linear-gradient(135deg,
             rgba(255, 255, 255, 0.95) 0%,
             rgba(248, 250, 252, 0.9) 50%,
             rgba(241, 245, 249, 0.85) 100%
@@ -31,21 +32,26 @@ export default function CustomWebDevPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 overflow-hidden relative">
+      {/* GradientMesh absolute background */}
+      <GradientMesh colors={["#e8f4fd", "#fde8e1", "#d4f0e8"]} intensity={0.7} />
+
       {/* Ambient Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-20 w-72 h-72 bg-gradient-to-br from-blue-100/30 to-purple-100/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-br from-red-100/20 to-orange-100/30 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-indigo-100/10 to-pink-100/10 rounded-full blur-3xl"></div>
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-20 w-72 h-72 bg-gradient-to-br from-blue-100/30 to-purple-100/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-br from-red-100/20 to-orange-100/30 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-indigo-100/10 to-pink-100/10 rounded-full blur-3xl" />
       </div>
 
       <div className="relative z-10 min-h-screen flex items-center justify-center p-6">
         <div className="w-full max-w-6xl mx-auto">
+          {/* Ticket with entrance animation */}
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            initial={{ rotateY: 90, opacity: 0 }}
+            animate={{ rotateY: 0, opacity: 1 }}
+            transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
             className="relative"
+            style={{ perspective: 1200 }}
           >
             <div
               ref={gradientRef}
@@ -54,7 +60,7 @@ export default function CustomWebDevPage() {
                 clipPath:
                   'polygon(0 0, calc(100% - 30px) 0, 100% 15px, 100% calc(100% - 15px), calc(100% - 30px) 100%, 0 100%, 15px calc(100% - 15px), 0 calc(100% - 30px))',
                 background: `
-                  linear-gradient(135deg, 
+                  linear-gradient(135deg,
                     rgba(255, 255, 255, 0.95) 0%,
                     rgba(248, 250, 252, 0.9) 50%,
                     rgba(241, 245, 249, 0.85) 100%
@@ -70,7 +76,8 @@ export default function CustomWebDevPage() {
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 0.3, duration: 0.6 }}
-                      className="inline-flex items-center space-x-2 bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded text-sm font-bold tracking-wider"
+                      className="inline-flex items-center space-x-2 text-white px-4 py-2 rounded text-sm font-bold tracking-wider"
+                      style={{ background: 'var(--color-accent-primary)' }}
                     >
                       <span>TRV-DEV</span>
                     </motion.div>
@@ -84,9 +91,11 @@ export default function CustomWebDevPage() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5, duration: 0.8 }}
-                    className="text-4xl lg:text-5xl font-light text-slate-800 leading-tight mb-4"
+                    className="text-4xl md:text-5xl font-thin text-slate-800 leading-tight mb-4"
                   >
-                    <span className="bg-gradient-to-r from-red-600 via-red-500 to-red-700 bg-clip-text text-transparent font-medium">
+                    <span className="bg-clip-text text-transparent font-medium"
+                      style={{ backgroundImage: 'linear-gradient(to right, var(--color-accent-primary), #e05a4a, var(--color-accent-primary))' }}
+                    >
                       Travel App
                     </span>
                     <br />
@@ -116,7 +125,7 @@ export default function CustomWebDevPage() {
                       <div className="text-xs text-gray-500 mt-1">Concept</div>
                     </div>
                     <div className="flex-1 flex justify-center">
-                      <div className="text-3xl text-red-500">✈️</div>
+                      <div className="text-3xl">✈️</div>
                     </div>
                     <div className="text-center">
                       <div className="text-xs text-gray-500 font-semibold tracking-wide">TO</div>
@@ -144,6 +153,23 @@ export default function CustomWebDevPage() {
                       <div>PREMIUM</div>
                     </div>
                   </motion.div>
+
+                  {/* CTA with magnetic button */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.25, duration: 0.7 }}
+                    className="mt-8"
+                  >
+                    <motion.button
+                      ref={magnetic.ref as React.RefObject<HTMLButtonElement>}
+                      style={{ x: magnetic.x, y: magnetic.y, background: 'var(--color-accent-primary)' } as React.CSSProperties}
+                      onClick={goContact}
+                      className="px-7 py-3 rounded-lg text-white font-semibold text-sm shadow-lg transition-all duration-300 hover:opacity-90"
+                    >
+                      Start Your Project
+                    </motion.button>
+                  </motion.div>
                 </div>
 
                 {/* Right Side - Image */}
@@ -158,43 +184,51 @@ export default function CustomWebDevPage() {
                       src={`${ImageHostLink}/travel2.jpg`}
                       alt="Travel App Development"
                       className="w-full h-full object-cover"
-                       loading="lazy"
+                      loading="lazy"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-white/20"></div>
+                    <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-white/20" />
 
-                    <motion.div
-                      initial={{ opacity: 0, y: 30 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 1.3, duration: 0.8 }}
-                      className="absolute top-6 right-6 bg-white/90 backdrop-blur-xl rounded-xl p-3 shadow-lg border border-white/50"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center text-white text-sm">
-                          🌍
+                    {/* Glass badge - Global Reach */}
+                    <TiltCard>
+                      <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 1.3, duration: 0.8 }}
+                        className="absolute top-6 right-6 bg-white/90 backdrop-blur-xl rounded-xl p-3 shadow-lg border border-white/50"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center text-white text-sm">
+                            🌍
+                          </div>
+                          <div>
+                            <h3 className="font-semibold text-slate-800 text-sm">Global Reach</h3>
+                            <p className="text-xs text-slate-600">Worldwide Solutions</p>
+                          </div>
                         </div>
-                        <div>
-                          <h3 className="font-semibold text-slate-800 text-sm">Global Reach</h3>
-                          <p className="text-xs text-slate-600">Worldwide Solutions</p>
-                        </div>
-                      </div>
-                    </motion.div>
+                      </motion.div>
+                    </TiltCard>
 
-                    <motion.div
-                      initial={{ opacity: 0, y: 30 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 1.5, duration: 0.8 }}
-                      className="absolute bottom-6 right-6 bg-white/90 backdrop-blur-xl rounded-xl p-3 shadow-lg border border-white/50"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center text-white text-sm">
-                          ⚡
+                    {/* Glass badge - Fast Performance */}
+                    <TiltCard>
+                      <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 1.5, duration: 0.8 }}
+                        className="absolute bottom-6 right-6 bg-white/90 backdrop-blur-xl rounded-xl p-3 shadow-lg border border-white/50"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm"
+                            style={{ background: 'var(--color-accent-primary)' }}
+                          >
+                            ⚡
+                          </div>
+                          <div>
+                            <h3 className="font-semibold text-slate-800 text-sm">Fast Performance</h3>
+                            <p className="text-xs text-slate-600">Optimized Experience</p>
+                          </div>
                         </div>
-                        <div>
-                          <h3 className="font-semibold text-slate-800 text-sm">Fast Performance</h3>
-                          <p className="text-xs text-slate-600">Optimized Experience</p>
-                        </div>
-                      </div>
-                    </motion.div>
+                      </motion.div>
+                    </TiltCard>
                   </div>
                 </motion.div>
 

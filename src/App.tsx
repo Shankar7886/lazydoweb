@@ -6,7 +6,9 @@ import {
   useLocation,
 } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import LuxuryLoader from "./components/Loader";
+import CustomCursor from "./lib/CustomCursor";
 
 // Your route components
 import Hero from "./components/Hero";
@@ -51,6 +53,15 @@ const RouteLoaderWrapper = () => {
   return (
     <>
       {loading && <LuxuryLoader />}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={location.pathname}
+          className="page-transition"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+        >
       <ReactRoutes location={location} key={location.pathname}>
         
         <Route path="/" element={<Hero />} />
@@ -84,16 +95,21 @@ const RouteLoaderWrapper = () => {
         <Route path="/contact" element={<ContactUSPage />} />
         <Route path="*" element={<LuxuryNotFoundPage/>}/>
       </ReactRoutes>
+        </motion.div>
+      </AnimatePresence>
     </>
   );
 };
 
 function App() {
   return (
-    <BrowserRouter>
-    <ScrollToTop />
-      <RouteLoaderWrapper />
-    </BrowserRouter>
+    <>
+      <CustomCursor />
+      <BrowserRouter>
+        <ScrollToTop />
+        <RouteLoaderWrapper />
+      </BrowserRouter>
+    </>
   );
 }
 

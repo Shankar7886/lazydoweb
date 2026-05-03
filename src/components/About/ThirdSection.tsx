@@ -7,6 +7,8 @@ import {
   Cpu, Layers, Bot, Search, TrendingUp, Shield, Palette,
   Terminal, GitBranch, Camera, Settings
 } from 'lucide-react';
+import TiltCard from '../../lib/TiltCard';
+import ScrollReveal from '../../lib/ScrollReveal';
 
 type IconType = React.FC<{ size?: number; className?: string }>;
 
@@ -15,7 +17,11 @@ interface Technology {
   icon: IconType;
 }
 
-// Animated Circuit Background
+// Animated Circuit Background — particle color updated to accent-primary CSS var
+const ACCENT_R = 200 / 255; // #c8392b
+const ACCENT_G = 57 / 255;
+const ACCENT_B = 43 / 255;
+
 const Circuit: React.FC = () => {
   const meshRef = useRef<THREE.LineSegments>(null);
   const points = useRef<THREE.Points>(null);
@@ -36,8 +42,13 @@ const Circuit: React.FC = () => {
     const colors: number[] = [];
 
     for (let i = 0; i < 500; i++) {
-      vertices.push((Math.random() - 0.5) * 20, (Math.random() - 0.5) * 20, (Math.random() - 0.5) * 5);
-      colors.push(1, 0.3, 0.3);
+      vertices.push(
+        (Math.random() - 0.5) * 20,
+        (Math.random() - 0.5) * 20,
+        (Math.random() - 0.5) * 5
+      );
+      // Use --color-accent-primary: #c8392b
+      colors.push(ACCENT_R, ACCENT_G, ACCENT_B);
     }
 
     geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
@@ -67,7 +78,8 @@ const Circuit: React.FC = () => {
         <pointsMaterial size={0.05} vertexColors transparent opacity={0.6} />
       </points>
       <lineSegments ref={meshRef} geometry={lineGeometry}>
-        <lineBasicMaterial color="#ef4444" transparent opacity={0.3} />
+        {/* Use accent-primary hex directly for the line material */}
+        <lineBasicMaterial color="#c8392b" transparent opacity={0.3} />
       </lineSegments>
     </>
   );
@@ -125,7 +137,7 @@ const TechCarousel: React.FC = () => {
   const itemWidth = 200;
 
   return (
-    <div className="relative overflow-hidden pt-30 pb-10" >
+    <div className="relative overflow-hidden pt-30 pb-10">
       {/* Background Canvas */}
       <div className="absolute inset-0 opacity-20">
         <Canvas camera={{ position: [0, 0, 10], fov: 60 }}>
@@ -137,71 +149,93 @@ const TechCarousel: React.FC = () => {
 
       <div className="relative z-10 px-4">
         {/* Title */}
-        <motion.h2
-          className="text-center text-3xl md:text-4xl font-light text-slate-800 tracking-wide"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <span className="bg-gradient-to-r from-slate-700 via-slate-800 to-red-700 bg-clip-text text-transparent">
-            TECHNOLOGIES WE USED
-          </span>
-        </motion.h2>
+        <ScrollReveal direction="up" delay={0}>
+          <motion.h2
+            className="text-center text-3xl md:text-4xl font-light text-slate-800 tracking-wide"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <span className="bg-gradient-to-r from-slate-700 via-slate-800 to-[var(--color-accent-primary)] bg-clip-text text-transparent">
+              TECHNOLOGIES WE USED
+            </span>
+          </motion.h2>
+        </ScrollReveal>
 
         {/* Carousel */}
-        <div className="mt-8">
-          <div className="overflow-hidden h-48">
-            <motion.div
-              className="flex items-center"
-              animate={{ x: -(currentIndex * itemWidth) }}
-              transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-              style={{ width: `${extendedTechnologies.length * itemWidth}px` }}
-            >
-              {extendedTechnologies.map((tech, index) => {
-                const actualIndex = index % technologies.length;
-                const isActive = actualIndex === currentIndex;
-                const Icon = tech.icon;
+        <ScrollReveal direction="up" delay={0.15}>
+          <div className="mt-8">
+            <div className="overflow-hidden h-48">
+              <motion.div
+                className="flex items-center"
+                animate={{ x: -(currentIndex * itemWidth) }}
+                transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+                style={{ width: `${extendedTechnologies.length * itemWidth}px` }}
+              >
+                {extendedTechnologies.map((tech, index) => {
+                  const actualIndex = index % technologies.length;
+                  const isActive = actualIndex === currentIndex;
+                  const Icon = tech.icon;
 
-                return (
-                  <motion.div
-                    key={`${tech.name}-${index}`}
-                    className="flex flex-col items-center w-[200px] flex-shrink-0 group"
-                    whileHover={{ scale: 1.02, y: -5 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                    style={{paddingTop:"20px"}}
-                  >
-                    <div
-                      className={`w-14 h-14 flex items-center justify-center rounded-xl shadow-md transition-all duration-500 
-                        ${isActive ? 'bg-gradient-to-br from-white to-red-50 border border-red-500' : 'border border-gray-200 group-hover:border-red-300'}`}
+                  return (
+                    <TiltCard
+                      key={`${tech.name}-${index}`}
+                      className="flex flex-col items-center w-[200px] flex-shrink-0 group"
                     >
-                      <Icon
-                        size={isActive ? 28 : 24}
-                        className={`transition-all ${isActive ? 'text-red-600' : 'text-slate-600 group-hover:text-red-500'}`}
-                      />
-                    </div>
-                    <span className={`mt-2 text-center transition-all duration-300 ${isActive ? 'text-sm font-medium' : 'text-xs text-slate-500'}`}>
-                      {tech.name}
-                    </span>
-                  </motion.div>
-                );
-              })}
-            </motion.div>
-          </div>
+                      <motion.div
+                        whileHover={{ scale: 1.02, y: -5 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                        style={{ paddingTop: "20px" }}
+                        className="flex flex-col items-center w-full"
+                      >
+                        <div
+                          className={`glass-card w-14 h-14 flex items-center justify-center rounded-xl shadow-md transition-all duration-500
+                            ${isActive
+                              ? 'border border-[var(--color-accent-primary)]'
+                              : 'border border-gray-200 group-hover:border-[var(--color-accent-primary)]'
+                            }`}
+                        >
+                          <Icon
+                            size={isActive ? 28 : 24}
+                            className={`transition-all ${isActive
+                              ? 'text-[var(--color-accent-primary)]'
+                              : 'text-slate-600 group-hover:text-[var(--color-accent-primary)]'
+                              }`}
+                          />
+                        </div>
+                        <span
+                          className={`mt-2 text-center transition-all duration-300 ${isActive
+                            ? 'text-sm font-medium'
+                            : 'text-xs text-slate-500'
+                            }`}
+                        >
+                          {tech.name}
+                        </span>
+                      </motion.div>
+                    </TiltCard>
+                  );
+                })}
+              </motion.div>
+            </div>
 
-          {/* Progress Bar */}
-          <div className="flex justify-center">
-            <div className="flex space-x-1">
-              {technologies.map((_, index) => (
-                <motion.div
-                  key={index}
-                  className={`h-px ${index === currentIndex ? 'bg-red-600 w-6' : 'bg-gray-300 w-4'} cursor-pointer`}
-                  onClick={() => setCurrentIndex(index)}
-                  whileHover={{ scaleY: 2 }}
-                />
-              ))}
+            {/* Progress Bar */}
+            <div className="flex justify-center">
+              <div className="flex space-x-1">
+                {technologies.map((_, index) => (
+                  <motion.div
+                    key={index}
+                    className={`h-px cursor-pointer ${index === currentIndex
+                      ? 'bg-[var(--color-accent-primary)] w-6'
+                      : 'bg-gray-300 w-4'
+                      }`}
+                    onClick={() => setCurrentIndex(index)}
+                    whileHover={{ scaleY: 2 }}
+                  />
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
       </div>
     </div>
   );

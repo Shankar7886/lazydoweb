@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useMagneticButton } from "../../lib/useMagneticButton";
 
-import companyLogo from "../../assets/onlysloth.png"
+import companyLogo from "../../assets/onlysloth.png";
 
 // Define types for menu items
 interface MenuItem {
@@ -17,17 +19,17 @@ const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
+  const { ref: ctaRef, x: ctaX, y: ctaY } = useMagneticButton(0.4);
+
   useEffect(() => {
     const onScroll = (): void => {
       setScrolled(window.scrollY > 30);
     };
 
-    // Update current path when it changes
     const handlePathChange = (): void => {
       setCurrentPath(window.location.pathname);
     };
 
-    // Check if device is mobile
     const checkMobile = (): void => {
       setIsMobile(window.innerWidth <= 768);
     };
@@ -89,118 +91,58 @@ const Header: React.FC = () => {
   ];
 
   const renderDropdown = (items: MenuItem[]): React.ReactElement => (
-    <div
-      style={{
-        position: "absolute",
-        top: "calc(100% + 5px)",
-        left: "50%",
-        transform: "translateX(-50%)",
-        background: "rgba(255, 255, 255, 0.98)",
-        borderRadius: "20px",
-        backdropFilter: "blur(32px)",
-        border: "1px solid rgba(255, 255, 255, 0.3)",
-        padding: "20px 0",
-        minWidth: "280px",
-        zIndex: 1000,
-        boxShadow:
-          "0 25px 50px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.05)",
-        animation: "morphIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
-      }}
-      onMouseEnter={() => {}}
-      onMouseLeave={() => {}}
-    >
-      <style>{`
-        @keyframes morphIn {
-          0% {
-            opacity: 0;
-            transform: translateX(-50%) translateY(-20px) scale(0.9);
-            filter: blur(10px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0) scale(1);
-            filter: blur(0px);
-          }
-        }
-        
-        .dropdown-item {
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          position: relative;
-          overflow: hidden;
-        }
-        
-        .dropdown-item::before {
-          content: '';
-          position: absolute;
-          left: -100%;
-          top: 0;
-          bottom: 0;
-          width: 100%;
-          background: linear-gradient(90deg, transparent, rgba(220, 38, 38, 0.05), transparent);
-          transition: left 0.5s ease;
-        }
-        
-        .dropdown-item:hover::before {
-          left: 100%;
-        }
-        
-        .dropdown-item:hover {
-          background: linear-gradient(135deg, rgba(220, 38, 38, 0.08) 0%, rgba(239, 68, 68, 0.05) 100%) !important;
-          color: #dc2626 !important;
-          transform: translateX(8px);
-          border-left: 3px solid #dc2626;
-        }
-      `}</style>
-
-      {items.map(({ label, path }: MenuItem, index: number) => (
-        <a
-          key={index}
-          href={path}
-          className="dropdown-item"
-          style={{
-            display: "block",
-            padding: "14px 24px",
-            color: "#1f2937",
-            textDecoration: "none",
-            fontWeight: "500",
-            fontSize: "15px",
-            fontFamily: "'Poppins', sans-serif",
-            whiteSpace: "nowrap",
-            letterSpacing: "-0.01em",
-          }}
-          onClick={() => setHoveredMenu(null)}
-        >
-          {label}
-        </a>
-      ))}
-    </div>
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0, y: -8, scale: 0.96 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: -8, scale: 0.96 }}
+        transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+        style={{
+          position: "absolute",
+          top: "calc(100% + 5px)",
+          left: "50%",
+          transform: "translateX(-50%)",
+          background: "rgba(255, 255, 255, 0.98)",
+          borderRadius: "20px",
+          backdropFilter: "blur(32px)",
+          border: "1px solid rgba(255, 255, 255, 0.3)",
+          padding: "20px 0",
+          minWidth: "280px",
+          zIndex: 1000,
+          boxShadow:
+            "0 25px 50px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.05)",
+        }}
+      >
+        {items.map(({ label, path }: MenuItem, index: number) => (
+          <a
+            key={index}
+            href={path}
+            className="block px-6 py-3.5 text-gray-800 font-medium text-[15px] no-underline tracking-tight
+                       hover:text-[var(--color-accent-primary)] hover:translate-x-2 hover:border-l-[3px]
+                       hover:border-[var(--color-accent-primary)]
+                       hover:[background:linear-gradient(135deg,rgba(200,57,43,0.08)_0%,rgba(200,57,43,0.05)_100%)]
+                       transition-all duration-300 whitespace-nowrap"
+            style={{ fontFamily: "'Poppins', sans-serif" }}
+            onClick={() => setHoveredMenu(null)}
+          >
+            {label}
+          </a>
+        ))}
+      </motion.div>
+    </AnimatePresence>
   );
 
   const renderMobileDropdown = (items: MenuItem[]): React.ReactElement => (
-    <div
-      style={{
-        paddingLeft: "20px",
-        background: "rgba(248, 250, 252, 0.5)",
-        borderRadius: "12px",
-        margin: "8px 0",
-        border: "1px solid rgba(220, 38, 38, 0.1)",
-      }}
-    >
+    <div className="pl-5 bg-white/50 rounded-xl my-2 border border-[var(--color-accent-primary)]/10">
       {items.map(({ label, path }: MenuItem, index: number) => (
         <a
           key={index}
           href={path}
+          className="block px-4 py-3 text-gray-700 no-underline font-medium text-sm transition-all duration-300"
           style={{
-            display: "block",
-            padding: "12px 16px",
-            color: "#374151",
-            textDecoration: "none",
-            fontWeight: "500",
-            fontSize: "14px",
             fontFamily: "'Poppins', sans-serif",
             borderBottom:
               index < items.length - 1 ? "1px solid rgba(0,0,0,0.05)" : "none",
-            transition: "all 0.3s ease",
           }}
           onClick={() => setIsMobileMenuOpen(false)}
         >
@@ -214,7 +156,7 @@ const Header: React.FC = () => {
     window.location.href = "/";
   };
 
-  const handleCtaClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
+  const handleCtaClick = (event: React.MouseEvent<HTMLAnchorElement>): void => {
     console.log(event, "CTA button clicked");
   };
 
@@ -234,723 +176,446 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-        
-        .luxury-header {
-          font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-          letter-spacing: -0.025em;
-        }
-        
-        .glass-effect {
-          background: ${
-            scrolled
-              ? "linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)"
-              : "linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(248, 250, 252, 0.8) 100%)"
-          };
-          backdrop-filter: blur(32px);
-          border: 1px solid rgba(255, 255, 255, 0.25);
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          box-shadow: ${
-            scrolled
-              ? "0 20px 40px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.2)"
-              : "0 15px 35px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.15)"
-          };
-        }
-        
-        .logo-container {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          cursor: pointer;
-        }
-        
-        .logo-container:hover {
-          transform: translateY(-2px) scale(1.02);
-        }
-        
-        .logo-icon {
-          width: 28px;
-          height: 28px;
-          border-radius: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 12px;
-          color: white;
-          font-weight: 800;
-          font-family: 'Space Grotesk', sans-serif;
-          position: relative;
-          overflow: hidden;
-        }
-        
-        .logo-icon img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-        }
-        
-        .logo-icon::before {
-          content: '';
-          position: absolute;
-          top: -50%;
-          left: -50%;
-          width: 200%;
-          height: 200%;
-          transform: rotate(45deg);
-          animation: shimmer 3s infinite;
-        }
-        
-        @keyframes shimmer {
-          0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-          50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-          100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-        }
-        
-        .logo-text {
-          font-weight: 800;
-          font-size: 16px;
-          font-family: 'Space Grotesk', sans-serif;
-          background: linear-gradient(135deg, #1a1a2e 0%, #2d1b32 50%, #7f1d1d 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          letter-spacing: -0.02em;
-          position: relative;
-        }
-        
-        .nav-item {
-          position: relative;
-          color: #374151;
-          text-decoration: none;
-          font-weight: 600;
-          font-size: 13px;
-          font-family: 'Poppins', sans-serif;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          padding: 6px 12px;
-          border-radius: 10px;
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          letter-spacing: -0.01em;
-          overflow: hidden;
-        }
-        
-        .nav-item.active {
-          color: #dc2626;
-          font-weight: 700;
-          background: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(239, 68, 68, 0.08) 100%);
-        }
-        
-        .nav-item.active::after {
-          width: 60%;
-          background: linear-gradient(90deg, #dc2626, #ef4444, #f87171);
-        }
-        
-        .nav-item::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(239, 68, 68, 0.08) 100%);
-          transform: scaleX(0);
-          transform-origin: left;
-          transition: transform 0.3s ease;
-          z-index: -1;
-        }
-        
-        .nav-item:hover::before {
-          transform: scaleX(1);
-        }
-        
-        .nav-item:hover {
-          color: #dc2626;
-          transform: translateY(-2px);
-          box-shadow: 0 8px 20px rgba(220, 38, 38, 0.15);
-        }
-        
-        .nav-item::after {
-          content: '';
-          position: absolute;
-          bottom: 4px;
-          left: 50%;
-          width: 0;
-          height: 3px;
-          background: linear-gradient(90deg, #dc2626, #ef4444, #f87171);
-          transition: all 0.3s ease;
-          transform: translateX(-50%);
-          border-radius: 2px;
-        }
-        
-        .nav-item:hover::after {
-          width: 60%;
-        }
-        
-        .dropdown-arrow {
-          font-size: 12px;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          color: #9ca3af;
-          font-weight: 600;
-        }
-        
-        .dropdown-active .dropdown-arrow {
-          transform: rotate(180deg) scale(1.1);
-          color: #dc2626;
-        }
-        
-        .dropdown-container {
-          position: relative;
-        }
-        
-        .dropdown-container::before {
-          content: '';
-          position: absolute;
-          top: 100%;
-          left: 0;
-          right: 0;
-          height: 10px;
-          background: transparent;
-          z-index: 999;
-        }
-        
-        .cta-button {
-          background: linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #f87171 100%);
-          border: none;
-          border-radius: 10px;
-          color: white;
-          font-weight: 700;
-          font-size: 13px;
-          font-family: 'Poppins', sans-serif;
-          padding: 8px 16px;
-          cursor: pointer;
-          position: relative;
-          overflow: hidden;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          letter-spacing: -0.01em;
-        }
-        
-        .cta-button::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-          transition: left 0.6s ease;
-        }
-        
-        .cta-button:hover::before {
-          left: 100%;
-        }
-        
-        .cta-button:hover {
-          box-shadow: 0 15px 35px rgba(220, 38, 38, 0.5);
-        }
-        
-        .cta-button:active {
-          transform: translateY(-1px) scale(0.98);
-        }
-        
-        .cta-arrow {
-          font-size: 14px;
-          font-weight: 800;
-          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .cta-button:hover .cta-arrow {
-          transform: translateX(4px) rotate(10deg);
-        }
-        
-        .floating-gradient {
-          position: absolute;
-          width: 300px;
-          height: 300px;
-          border-radius: 50%;
-          background: radial-gradient(circle, rgba(220, 38, 38, 0.03) 0%, transparent 70%);
-          pointer-events: none;
-          top: -150px;
-          left: -150px;
-          animation: float 20s infinite ease-in-out;
-          z-index: -1;
-        }
-        
-        @keyframes float {
-          0%, 100% { transform: translate(0, 0) rotate(0deg); }
-          25% { transform: translate(100px, -50px) rotate(90deg); }
-          50% { transform: translate(-50px, 50px) rotate(180deg); }
-          75% { transform: translate(-100px, -25px) rotate(270deg); }
-        }
-
-        /* Mobile Menu Styles */
-        .mobile-menu-toggle {
-          display: none;
-          background: none;
-          border: none;
-          cursor: pointer;
-          padding: 8px;
-          border-radius: 8px;
-          transition: all 0.3s ease;
-          position: relative;
-          z-index: 1001;
-        }
-
-        .mobile-menu-toggle:hover {
-          background: rgba(220, 38, 38, 0.1);
-        }
-
-        .hamburger {
-          width: 24px;
-          height: 18px;
-          position: relative;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-        }
-
-        .hamburger span {
-          width: 100%;
-          height: 2px;
-          background: #374151;
-          border-radius: 1px;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          transform-origin: center;
-        }
-
-        .hamburger.active span:nth-child(1) {
-          transform: rotate(45deg) translate(5px, 5px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-          opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-          transform: rotate(-45deg) translate(7px, -6px);
-        }
-
-        .mobile-menu {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(255, 255, 255, 0.98);
-          backdrop-filter: blur(32px);
-          z-index: 1000;
-          padding: 100px 20px 20px;
-          transform: translateX(-100%);
-          transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          overflow-y: auto;
-        }
-
-        .mobile-menu.open {
-          transform: translateX(0);
-        }
-
-        .mobile-nav-item {
-          display: block;
-          padding: 16px 0;
-          color: #374151;
-          text-decoration: none;
-          font-weight: 600;
-          font-size: 16px;
-          font-family: 'Poppins', sans-serif;
-          border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-          transition: all 0.3s ease;
-        }
-
-        .mobile-nav-item:hover {
-          color: #dc2626;
-          transform: translateX(8px);
-        }
-
-        .mobile-nav-item.active {
-          color: #dc2626;
-          font-weight: 700;
-        }
-
-        .mobile-dropdown-toggle {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          cursor: pointer;
-          padding: 16px 0;
-          border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        .mobile-dropdown-arrow {
-          font-size: 14px;
-          transition: transform 0.3s ease;
-        }
-
-        .mobile-dropdown-arrow.active {
-          transform: rotate(180deg);
-        }
-
-        .mobile-cta-button {
-          width: 100%;
-          margin-top: 20px;
-          padding: 16px;
-          font-size: 16px;
-          border-radius: 12px;
-          background: linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #f87171 100%);
-          border: none;
-          color: white;
-          font-weight: 700;
-          font-family: 'Poppins', sans-serif;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
-        }
-
-        .mobile-cta-button:hover {
-          box-shadow: 0 8px 25px rgba(220, 38, 38, 0.5);
-        }
-        
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-          .luxury-header {
-            padding: 8px 16px !important;
-            width: calc(100% - 32px) !important;
-            top: 10px !important;
-          }
-          
-          .desktop-nav {
-            display: none !important;
-          }
-          
-          .mobile-menu-toggle {
-            display: block !important;
-          }
-          
-          .cta-button {
-            display: none !important;
-          }
-          
-          .logo-text {
-            font-size: 14px;
-          }
-          
-          .logo-icon {
-            width: 24px;
-            height: 24px;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .luxury-header {
-            padding: 6px 12px !important;
-            width: calc(100% - 24px) !important;
-          }
-          
-          .logo-text {
-            font-size: 13px;
-          }
-          
-          .logo-icon {
-            width: 22px;
-            height: 22px;
-          }
-        }
-      `}</style>
-
-      <div className="floating-gradient"></div>
-
+      {/* Floating header bar */}
       <div
-        className="luxury-header glass-effect"
+        className={`glass-nav fixed top-5 left-1/2 -translate-x-1/2 z-[1000] flex items-center justify-between
+                    px-5 py-2 rounded-[14px] max-w-[1250px] w-[calc(100%-40px)]
+                    transition-shadow duration-300 font-[Plus_Jakarta_Sans,system-ui,sans-serif]
+                    md:w-[calc(100%-40px)] sm:w-[calc(100%-32px)] sm:top-[10px] sm:px-4 sm:py-2`}
         style={{
-          position: "fixed",
-          top: 20,
-          left: "50%",
-          transform: "translateX(-50%)",
-          zIndex: 1000,
-          padding: "8px 20px",
-          maxWidth: "1250px",
-          width: "calc(100% - 40px)",
-          borderRadius: "14px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
+          boxShadow: scrolled
+            ? "0 20px 40px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.2)"
+            : "0 15px 35px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.15)",
         }}
       >
         {/* Logo */}
-        <div className="logo-container" onClick={handleLogoClick}>
-          <div className="logo-icon">
+        <div
+          className="flex items-center gap-2 cursor-pointer transition-transform duration-300 hover:-translate-y-0.5 hover:scale-[1.02]"
+          onClick={handleLogoClick}
+        >
+          <div className="w-7 h-7 rounded-lg flex items-center justify-center overflow-hidden">
             <img
               src={companyLogo}
               alt="MS"
               loading="lazy"
+              className="w-full h-full object-contain"
             />
           </div>
-          <span className="logo-text">Lazy Do</span>
+          <span
+            className="font-extrabold text-base tracking-tight"
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              background:
+                "linear-gradient(135deg, #1a1a2e 0%, #2d1b32 50%, #7f1d1d 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
+          >
+            Lazy Do
+          </span>
         </div>
 
         {/* Desktop Navigation */}
-        <nav
-          className="desktop-nav"
-          style={{
-            display: "flex",
-            gap: "8px",
-            alignItems: "center",
-          }}
-        >
+        <nav className="hidden md:flex gap-2 items-center">
+          {/* Home */}
           <a
             href="/"
-            className={`nav-item ${isActivePage("/") ? "active" : ""}`}
+            className={`relative flex items-center gap-1 px-3 py-1.5 rounded-[10px] no-underline font-semibold text-[13px] tracking-tight
+                        transition-all duration-300 hover:-translate-y-0.5
+                        ${isActivePage("/") ? "text-[var(--color-accent-primary)] bg-[rgba(200,57,43,0.1)]" : "text-gray-700 hover:text-[var(--color-accent-primary)]"}`}
+            style={{ fontFamily: "'Poppins', sans-serif" }}
             onClick={closeMobileMenu}
           >
             Home
+            <AnimatePresence>
+              {isActivePage("/") && (
+                <motion.span
+                  layoutId="navIndicator"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
+                  style={{ background: "var(--color-accent-primary)" }}
+                  initial={false}
+                />
+              )}
+            </AnimatePresence>
           </a>
+
+          {/* About Us */}
           <a
             href="/aboutUs"
-            className={`nav-item ${isActivePage("/aboutUs") ? "active" : ""}`}
+            className={`relative flex items-center gap-1 px-3 py-1.5 rounded-[10px] no-underline font-semibold text-[13px] tracking-tight
+                        transition-all duration-300 hover:-translate-y-0.5
+                        ${isActivePage("/aboutUs") ? "text-[var(--color-accent-primary)] bg-[rgba(200,57,43,0.1)]" : "text-gray-700 hover:text-[var(--color-accent-primary)]"}`}
+            style={{ fontFamily: "'Poppins', sans-serif" }}
           >
             About Us
+            <AnimatePresence>
+              {isActivePage("/aboutUs") && (
+                <motion.span
+                  layoutId="navIndicator"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
+                  style={{ background: "var(--color-accent-primary)" }}
+                  initial={false}
+                />
+              )}
+            </AnimatePresence>
           </a>
 
+          {/* Services dropdown */}
           <div
-            className={`dropdown-container ${
-              hoveredMenu === "Services" ? "dropdown-active" : ""
-            }`}
+            className="relative"
             onMouseEnter={() => !isMobile && setHoveredMenu("Services")}
             onMouseLeave={() => !isMobile && handleMenuLeave("Services")}
-            style={{ position: "relative" }}
           >
             <span
-              className={`nav-item ${
-                isActivePage("/Services/") ? "active" : ""
-              }`}
-              style={{ cursor: "pointer" }}
+              className={`relative flex items-center gap-1 px-3 py-1.5 rounded-[10px] font-semibold text-[13px] tracking-tight
+                          cursor-pointer transition-all duration-300 hover:-translate-y-0.5
+                          ${isActivePage("/Services/") || hoveredMenu === "Services" ? "text-[var(--color-accent-primary)] bg-[rgba(200,57,43,0.1)]" : "text-gray-700 hover:text-[var(--color-accent-primary)]"}`}
+              style={{ fontFamily: "'Poppins', sans-serif" }}
             >
               Services
-              <span className="dropdown-arrow">▼</span>
+              <span
+                className={`text-xs font-semibold transition-all duration-300
+                            ${hoveredMenu === "Services" ? "rotate-180 text-[var(--color-accent-primary)]" : "text-gray-400"}`}
+              >
+                ▼
+              </span>
+              <AnimatePresence>
+                {isActivePage("/Services/") && (
+                  <motion.span
+                    layoutId="navIndicator"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
+                    style={{ background: "var(--color-accent-primary)" }}
+                    initial={false}
+                  />
+                )}
+              </AnimatePresence>
             </span>
-            {hoveredMenu === "Services" &&
-              !isMobile &&
-              renderDropdown(servicesSubmenu)}
+            {hoveredMenu === "Services" && !isMobile && renderDropdown(servicesSubmenu)}
           </div>
 
+          {/* Industry dropdown */}
           <div
-            className={`dropdown-container ${
-              hoveredMenu === "Industry" ? "dropdown-active" : ""
-            }`}
+            className="relative"
             onMouseEnter={() => !isMobile && setHoveredMenu("Industry")}
             onMouseLeave={() => !isMobile && handleMenuLeave("Industry")}
-            style={{ position: "relative" }}
           >
             <span
-              className={`nav-item ${
-                isActivePage("/Industry/") ? "active" : ""
-              }`}
-              style={{ cursor: "pointer" }}
+              className={`relative flex items-center gap-1 px-3 py-1.5 rounded-[10px] font-semibold text-[13px] tracking-tight
+                          cursor-pointer transition-all duration-300 hover:-translate-y-0.5
+                          ${isActivePage("/Industry/") || hoveredMenu === "Industry" ? "text-[var(--color-accent-primary)] bg-[rgba(200,57,43,0.1)]" : "text-gray-700 hover:text-[var(--color-accent-primary)]"}`}
+              style={{ fontFamily: "'Poppins', sans-serif" }}
             >
               Industry
-              <span className="dropdown-arrow">▼</span>
+              <span
+                className={`text-xs font-semibold transition-all duration-300
+                            ${hoveredMenu === "Industry" ? "rotate-180 text-[var(--color-accent-primary)]" : "text-gray-400"}`}
+              >
+                ▼
+              </span>
+              <AnimatePresence>
+                {isActivePage("/Industry/") && (
+                  <motion.span
+                    layoutId="navIndicator"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
+                    style={{ background: "var(--color-accent-primary)" }}
+                    initial={false}
+                  />
+                )}
+              </AnimatePresence>
             </span>
-            {hoveredMenu === "Industry" &&
-              !isMobile &&
-              renderDropdown(industrySubmenu)}
+            {hoveredMenu === "Industry" && !isMobile && renderDropdown(industrySubmenu)}
           </div>
 
+          {/* Blog */}
           <a
             href="/blogs"
-            className={`nav-item ${isActivePage("/blogs") ? "active" : ""}`}
+            className={`relative flex items-center gap-1 px-3 py-1.5 rounded-[10px] no-underline font-semibold text-[13px] tracking-tight
+                        transition-all duration-300 hover:-translate-y-0.5
+                        ${isActivePage("/blogs") ? "text-[var(--color-accent-primary)] bg-[rgba(200,57,43,0.1)]" : "text-gray-700 hover:text-[var(--color-accent-primary)]"}`}
+            style={{ fontFamily: "'Poppins', sans-serif" }}
           >
             Blog
+            <AnimatePresence>
+              {isActivePage("/blogs") && (
+                <motion.span
+                  layoutId="navIndicator"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
+                  style={{ background: "var(--color-accent-primary)" }}
+                  initial={false}
+                />
+              )}
+            </AnimatePresence>
           </a>
+
+          {/* Portfolio */}
           <a
             href="/portfolio"
-            className={`nav-item ${isActivePage("/portfolio") ? "active" : ""}`}
+            className={`relative flex items-center gap-1 px-3 py-1.5 rounded-[10px] no-underline font-semibold text-[13px] tracking-tight
+                        transition-all duration-300 hover:-translate-y-0.5
+                        ${isActivePage("/portfolio") ? "text-[var(--color-accent-primary)] bg-[rgba(200,57,43,0.1)]" : "text-gray-700 hover:text-[var(--color-accent-primary)]"}`}
+            style={{ fontFamily: "'Poppins', sans-serif" }}
           >
             Portfolio
+            <AnimatePresence>
+              {isActivePage("/portfolio") && (
+                <motion.span
+                  layoutId="navIndicator"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
+                  style={{ background: "var(--color-accent-primary)" }}
+                  initial={false}
+                />
+              )}
+            </AnimatePresence>
           </a>
         </nav>
 
-        {/* Desktop CTA Button */}
-        <a href="/contact" className="desktop-cta">
-          <button className="cta-button" onClick={handleCtaClick}>
+        {/* Desktop CTA Button — magnetic */}
+        <motion.a
+          ref={ctaRef as React.RefObject<HTMLAnchorElement>}
+          href="/contact"
+          data-cursor="hover"
+          style={{ x: ctaX, y: ctaY, display: "inline-flex" }}
+          className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 rounded-[10px] text-white font-bold text-[13px] tracking-tight
+                     cursor-pointer overflow-hidden transition-shadow duration-300 no-underline"
+          onClick={handleCtaClick}
+        >
+          {/* Button background */}
+          <span
+            className="absolute inset-0 rounded-[10px]"
+            style={{
+              background:
+                "linear-gradient(135deg, var(--color-accent-primary) 0%, #ef4444 50%, #f87171 100%)",
+              boxShadow: "0 4px 15px rgba(200,57,43,0.4)",
+              zIndex: 0,
+            }}
+            aria-hidden="true"
+          />
+          <span className="relative z-10" style={{ fontFamily: "'Poppins', sans-serif" }}>
             Contact Us
-            <span className="cta-arrow">→</span>
-          </button>
-        </a>
+          </span>
+          <span className="relative z-10 text-sm font-extrabold">→</span>
+        </motion.a>
 
-        {/* Mobile Menu Toggle */}
+        {/* Mobile Hamburger Toggle */}
         <button
-          className="mobile-menu-toggle"
+          className="flex md:hidden bg-transparent border-none cursor-pointer p-2 rounded-lg
+                     hover:bg-[rgba(200,57,43,0.1)] transition-all duration-300 relative z-[1001]"
           onClick={toggleMobileMenu}
           aria-label="Toggle mobile menu"
         >
-          <div className={`hamburger ${isMobileMenuOpen ? "active" : ""}`}>
-            <span></span>
-            <span></span>
-            <span></span>
+          <div className="w-6 h-[18px] relative flex flex-col justify-between">
+            <span
+              className="w-full h-0.5 bg-gray-700 rounded-sm transition-all duration-300"
+              style={{
+                transform: isMobileMenuOpen
+                  ? "rotate(45deg) translate(5px, 5px)"
+                  : "none",
+              }}
+            />
+            <span
+              className="w-full h-0.5 bg-gray-700 rounded-sm transition-all duration-300"
+              style={{ opacity: isMobileMenuOpen ? 0 : 1 }}
+            />
+            <span
+              className="w-full h-0.5 bg-gray-700 rounded-sm transition-all duration-300"
+              style={{
+                transform: isMobileMenuOpen
+                  ? "rotate(-45deg) translate(7px, -6px)"
+                  : "none",
+              }}
+            />
           </div>
         </button>
       </div>
 
-      {/* Mobile Menu */}
-      <div className={`mobile-menu ${isMobileMenuOpen ? "open" : ""}`}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "0 10px",
-            position: "absolute",
-            top: 20,
-            left: 0,
-            right: 10,
-          }}
-        >
-          <div
-            className="logo-container"
-            onClick={() => {
-              window.location.href = "/";
-              closeMobileMenu();
-            }}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              cursor: "pointer",
-            }}
+      {/* Mobile Menu Drawer — framer-motion spring */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ x: "-100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "-100%" }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="fixed inset-0 z-[1000] bg-white/98 backdrop-blur-xl overflow-y-auto pt-24 px-5 pb-5"
+            style={{ backdropFilter: "blur(32px)" }}
           >
-            <div className="logo-icon" style={{ width: 28, height: 28 }}>
-              <img
-                src={companyLogo}
-                loading="lazy"
-                alt="MS"
-                style={{ width: "100%", height: "100%", objectFit: "contain" }}
-              />
+            {/* Mobile header row */}
+            <div className="absolute top-5 left-0 right-2.5 flex justify-between items-center px-4">
+              <div
+                className="flex items-center gap-2 cursor-pointer"
+                onClick={() => {
+                  window.location.href = "/";
+                  closeMobileMenu();
+                }}
+              >
+                <div className="w-7 h-7 overflow-hidden rounded-lg">
+                  <img
+                    src={companyLogo}
+                    loading="lazy"
+                    alt="MS"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <span
+                  className="font-bold text-[15px] tracking-tight"
+                  style={{
+                    fontFamily: "'Space Grotesk', sans-serif",
+                    background:
+                      "linear-gradient(135deg, #1a1a2e 0%, #2d1b32 50%, #7f1d1d 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  Lazy Do
+                </span>
+              </div>
+
+              <button
+                onClick={closeMobileMenu}
+                className="bg-transparent border-none text-[35px] font-bold text-gray-700 cursor-pointer leading-none"
+                aria-label="Close menu"
+              >
+                ×
+              </button>
             </div>
-            <span
-              className="logo-text"
-              style={{ fontSize: "15px", fontWeight: 700 }}
-            >
-             Lazy Do
-            </span>
-          </div>
 
-          <button
-            onClick={closeMobileMenu}
-            style={{
-              background: "transparent",
-              border: "none",
-              fontSize: "35px",
-              fontWeight: "bold",
-              color: "#374151",
-              cursor: "pointer",
-            }}
-            aria-label="Close menu"
-          >
-            ×
-          </button>
-        </div>
-        <nav>
-          <a
-            href="/"
-            className={`mobile-nav-item ${isActivePage("/") ? "active" : ""}`}
-            onClick={closeMobileMenu}
-          >
-            Home
-          </a>
-          <a
-            href="/aboutUs"
-            className={`mobile-nav-item ${
-              isActivePage("/aboutUs") ? "active" : ""
-            }`}
-            onClick={closeMobileMenu}
-          >
-            About Us
-          </a>
-
-          <div>
-            <div
-              className="mobile-dropdown-toggle"
-              onClick={() =>
-                setHoveredMenu(hoveredMenu === "Services" ? null : "Services")
-              }
-            >
-              <span
-                className={`mobile-nav-item ${
-                  isActivePage("/Services/") ? "active" : ""
-                }`}
-                style={{ padding: 0, border: "none" }}
+            {/* Mobile nav links */}
+            <nav>
+              <a
+                href="/"
+                className={`block py-4 no-underline font-semibold text-base border-b border-black/5 transition-all duration-300
+                            hover:text-[var(--color-accent-primary)] hover:translate-x-2
+                            ${isActivePage("/") ? "text-[var(--color-accent-primary)] font-bold" : "text-gray-700"}`}
+                style={{ fontFamily: "'Poppins', sans-serif" }}
+                onClick={closeMobileMenu}
               >
-                Services
-              </span>
-              <span
-                className={`mobile-dropdown-arrow ${
-                  hoveredMenu === "Services" ? "active" : ""
-                }`}
+                Home
+              </a>
+
+              <a
+                href="/aboutUs"
+                className={`block py-4 no-underline font-semibold text-base border-b border-black/5 transition-all duration-300
+                            hover:text-[var(--color-accent-primary)] hover:translate-x-2
+                            ${isActivePage("/aboutUs") ? "text-[var(--color-accent-primary)] font-bold" : "text-gray-700"}`}
+                style={{ fontFamily: "'Poppins', sans-serif" }}
+                onClick={closeMobileMenu}
               >
-                ▼
-              </span>
-            </div>
-            {hoveredMenu === "Services" &&
-              renderMobileDropdown(servicesSubmenu)}
-          </div>
+                About Us
+              </a>
 
-          <div>
-            <div
-              className="mobile-dropdown-toggle"
-              onClick={() =>
-                setHoveredMenu(hoveredMenu === "Industry" ? null : "Industry")
-              }
-            >
-              <span
-                className={`mobile-nav-item ${
-                  isActivePage("/Industry/") ? "active" : ""
-                }`}
-                style={{ padding: 0, border: "none" }}
+              {/* Mobile Services */}
+              <div>
+                <div
+                  className="flex items-center justify-between py-4 border-b border-black/5 cursor-pointer"
+                  onClick={() =>
+                    setHoveredMenu(hoveredMenu === "Services" ? null : "Services")
+                  }
+                >
+                  <span
+                    className={`font-semibold text-base transition-colors
+                                ${isActivePage("/Services/") ? "text-[var(--color-accent-primary)]" : "text-gray-700"}`}
+                    style={{ fontFamily: "'Poppins', sans-serif" }}
+                  >
+                    Services
+                  </span>
+                  <span
+                    className={`text-sm transition-transform duration-300
+                                ${hoveredMenu === "Services" ? "rotate-180 text-[var(--color-accent-primary)]" : "text-gray-400"}`}
+                  >
+                    ▼
+                  </span>
+                </div>
+                <AnimatePresence>
+                  {hoveredMenu === "Services" && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {renderMobileDropdown(servicesSubmenu)}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Mobile Industry */}
+              <div>
+                <div
+                  className="flex items-center justify-between py-4 border-b border-black/5 cursor-pointer"
+                  onClick={() =>
+                    setHoveredMenu(hoveredMenu === "Industry" ? null : "Industry")
+                  }
+                >
+                  <span
+                    className={`font-semibold text-base transition-colors
+                                ${isActivePage("/Industry/") ? "text-[var(--color-accent-primary)]" : "text-gray-700"}`}
+                    style={{ fontFamily: "'Poppins', sans-serif" }}
+                  >
+                    Industry
+                  </span>
+                  <span
+                    className={`text-sm transition-transform duration-300
+                                ${hoveredMenu === "Industry" ? "rotate-180 text-[var(--color-accent-primary)]" : "text-gray-400"}`}
+                  >
+                    ▼
+                  </span>
+                </div>
+                <AnimatePresence>
+                  {hoveredMenu === "Industry" && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {renderMobileDropdown(industrySubmenu)}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              <a
+                href="/blogs"
+                className={`block py-4 no-underline font-semibold text-base border-b border-black/5 transition-all duration-300
+                            hover:text-[var(--color-accent-primary)] hover:translate-x-2
+                            ${isActivePage("/blogs") ? "text-[var(--color-accent-primary)] font-bold" : "text-gray-700"}`}
+                style={{ fontFamily: "'Poppins', sans-serif" }}
+                onClick={closeMobileMenu}
               >
-                Industry
-              </span>
-              <span
-                className={`mobile-dropdown-arrow ${
-                  hoveredMenu === "Industry" ? "active" : ""
-                }`}
+                Blog
+              </a>
+
+              <a
+                href="/portfolio"
+                className={`block py-4 no-underline font-semibold text-base border-b border-black/5 transition-all duration-300
+                            hover:text-[var(--color-accent-primary)] hover:translate-x-2
+                            ${isActivePage("/portfolio") ? "text-[var(--color-accent-primary)] font-bold" : "text-gray-700"}`}
+                style={{ fontFamily: "'Poppins', sans-serif" }}
+                onClick={closeMobileMenu}
               >
-                ▼
-              </span>
-            </div>
-            {hoveredMenu === "Industry" &&
-              renderMobileDropdown(industrySubmenu)}
-          </div>
+                Portfolio
+              </a>
 
-          <a
-            href="/blogs"
-            className={`mobile-nav-item ${
-              isActivePage("/blogs") ? "active" : ""
-            }`}
-            onClick={closeMobileMenu}
-          >
-            Blog
-          </a>
-
-          <a
-            href="/portfolio"
-            className={`mobile-nav-item ${
-              isActivePage("/portfolio") ? "active" : ""
-            }`}
-            onClick={closeMobileMenu}
-          >
-            Portfolio
-          </a>
-
-          <a href="/contact" onClick={closeMobileMenu}>
-            <button className="mobile-cta-button">Contact Us →</button>
-          </a>
-        </nav>
-      </div>
+              <a href="/contact" onClick={closeMobileMenu} className="no-underline">
+                <button
+                  className="w-full mt-5 py-4 px-4 text-base font-bold text-white rounded-xl border-none cursor-pointer transition-all duration-300"
+                  style={{
+                    fontFamily: "'Poppins', sans-serif",
+                    background:
+                      "linear-gradient(135deg, var(--color-accent-primary) 0%, #ef4444 50%, #f87171 100%)",
+                    boxShadow: "0 4px 15px rgba(200,57,43,0.4)",
+                  }}
+                >
+                  Contact Us →
+                </button>
+              </a>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };

@@ -1,6 +1,5 @@
 import React from "react";
 import Header from "../Header";
-// import { Outlet } from "react-router-dom";
 import Footer from "../Footer";
 import FirstHeroSection from "./FirstSection";
 import SecondSection from "./SecondSection";
@@ -8,32 +7,32 @@ import ThirdSection from "./ThirdSection";
 import StatsSection from "./StatsSection";
 import FourthSection from "./FourthSection";
 import FifthSection from "./FifthSection";
-
-
+import GradientMesh from "../../lib/GradientMesh";
 
 const Hero: React.FC = () => {
   return (
     <>
+      {/* Global animated gradient background — fixed behind all content */}
       <div
         style={{
-          minHeight: "100vh",
-          background:
-            "linear-gradient(25deg, rgb(255, 255, 255) 0%, rgba(222, 214, 235, 0.12) 50%, rgb(242 245 245) 100%)",
-          paddingTop: "40px",
-          // paddingBottom: "80px",
+          position: "fixed",
+          inset: 0,
+          zIndex: -1,
+          pointerEvents: "none",
         }}
       >
+        <GradientMesh colors={["#fde8e1", "#e8e6ff", "#d4f0e8"]} />
+      </div>
+
+      <div style={{ minHeight: "100vh", paddingTop: "40px" }}>
         <Header />
         <FirstHeroSection />
-        <SecondSection/>
-       
-        {/* <BrandSection /> */}
-        <ThirdSection/>
-        
-        <FourthSection/>
-        <FifthSection/>
-         <StatsSection/>
-        <Footer/>
+        <SecondSection />
+        <ThirdSection />
+        <FourthSection />
+        <FifthSection />
+        <StatsSection />
+        <Footer />
       </div>
     </>
   );

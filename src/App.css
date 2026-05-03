@@ -1,8 +1,211 @@
 @import "tailwindcss";
 
-#root {
-  /* max-width: 1280px;
-  margin: 0 auto; */
+@theme {
+  /* Surface palette — warm cream/white */
+  --color-surface-0: #ffffff;
+  --color-surface-1: #fafaf8;
+  --color-surface-2: #f4f3ef;
+  --color-surface-3: #ece9e1;
 
+  /* Accent colors */
+  --color-accent-primary: #c8392b;
+  --color-accent-warm: #e85d3e;
+  --color-accent-gold: #b8973a;
+  --color-accent-blush: #f0c4b0;
+
+  /* Text hierarchy */
+  --color-ink-900: #0f0e0d;
+  --color-ink-700: #2c2a28;
+  --color-ink-500: #6b6460;
+  --color-ink-300: #b4afab;
+
+  /* Glass system */
+  --color-glass-white: rgba(255, 255, 255, 0.72);
+  --color-glass-warm: rgba(250, 248, 244, 0.68);
+  --color-glass-tinted: rgba(200, 57, 43, 0.06);
+
+  /* Gradient mesh color nodes */
+  --color-mesh-a: #fde8e1;
+  --color-mesh-b: #e8e6ff;
+  --color-mesh-c: #d4f0e8;
+  --color-mesh-d: #fef3cd;
+
+  /* Shadow tokens */
+  --shadow-float: 0 32px 64px -12px rgba(15, 14, 13, 0.14),
+    0 0 0 1px rgba(15, 14, 13, 0.04);
+  --shadow-card: 0 8px 32px rgba(15, 14, 13, 0.08),
+    0 1px 4px rgba(15, 14, 13, 0.06);
+  --shadow-glow-accent: 0 0 40px rgba(200, 57, 43, 0.22);
+  --shadow-glow-gold: 0 0 40px rgba(184, 151, 58, 0.22);
 }
 
+/* ─── Tailwind v4 Custom Utilities ─── */
+
+@utility glass-card {
+  background: var(--color-glass-white);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: var(--shadow-card);
+}
+
+@utility glass-nav {
+  background: var(--color-glass-warm);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+@utility mesh-bg {
+  background: radial-gradient(
+      ellipse 600px 500px at 10% 10%,
+      var(--color-mesh-a) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 500px 600px at 90% 90%,
+      var(--color-mesh-b) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 700px 400px at 50% 50%,
+      var(--color-mesh-c) 0%,
+      transparent 70%
+    ),
+    var(--color-surface-1);
+  background-attachment: fixed;
+}
+
+@utility gradient-text {
+  background: linear-gradient(
+    135deg,
+    var(--color-accent-primary),
+    var(--color-accent-warm)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Global resets ─── */
+
+html {
+  scroll-behavior: smooth;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-surface-1);
+  color: var(--color-ink-700);
+  font-family: "Quicksand", "Plus Jakarta Sans", "Poppins", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ─── Custom Cursor ─── */
+
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-accent-primary);
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+}
+
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-accent-primary);
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  opacity: 0.6;
+}
+
+/* ─── Page transition wrapper ─── */
+
+.page-transition {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* ─── Gradient shimmer animation ─── */
+
+@keyframes shimmer-move {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    var(--color-accent-primary),
+    var(--color-accent-warm),
+    var(--color-accent-gold),
+    var(--color-accent-primary)
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer-move 4s linear infinite;
+}
+
+/* ─── Float animation ─── */
+
+@keyframes gentle-float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.float-element {
+  animation: gentle-float 4s ease-in-out infinite;
+}
+
+/* ─── 3D card base ─── */
+
+.tilt-container {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+/* ─── Section spacing ─── */
+
+.section-padding {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+@media (min-width: 768px) {
+  .section-padding {
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+  }
+}
