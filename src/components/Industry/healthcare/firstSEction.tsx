@@ -1,95 +1,138 @@
+import { motion } from "framer-motion";
+import useGoToContactPage from "../../Contact/contactFn";
+import ImageHostLink from "../../../variable";
+import GradientMesh from "../../../lib/GradientMesh";
+import TiltCard from "../../../lib/TiltCard";
+import { useMagneticButton } from "../../../lib/useMagneticButton";
 
-import { motion } from 'framer-motion';
-// import doctorImage1 from "../../../assets/healthBackground.jpg";
-// import doctorImage2 from "../../../assets/healthsecond.jpg";
-import useGoToContactPage from '../../Contact/contactFn';
-import ImageHostLink from '../../../variable';
-
-export default function App() {
+export default function HealthcareLanding() {
   const goContact = useGoToContactPage();
+  const magnet = useMagneticButton();
 
-  const doctorImage1 = `${ImageHostLink}healthBackground.jpg`
-  const doctorImage2 = `${ImageHostLink}healthsecond.jpg`
+  const doctorImage1 = `${ImageHostLink}healthBackground.jpg`;
+  const doctorImage2 = `${ImageHostLink}healthsecond.jpg`;
+
   return (
-    <section className="relative w-full min-h-screen bg-white text-slate-800 flex items-center justify-center overflow-hidden font-quicksand py-16 px-4 md:px-8">
-      {/* Background Shapes */}
-      <div className="absolute top-0 left-0 w-48 h-48 bg-blue-500/10 rounded-full -translate-x-1/2 -translate-y-1/2" />
-      <div className="absolute bottom-0 right-0 w-64 h-64 bg-orange-400/10 rounded-full translate-x-1/2 translate-y-1/2" />
-      <div className="absolute top-1/4 right-0 w-32 h-32 bg-cyan-400/10 rounded-full translate-x-1/2" />
-      <div className="absolute bottom-1/4 left-0 w-24 h-24 bg-purple-400/10 rounded-full -translate-x-1/2" />
+    <section className="relative w-full min-h-screen text-slate-800 flex items-center justify-center overflow-hidden py-16 px-4 md:px-8">
+      <GradientMesh colors={["#d4f0e8", "#e8f4fd", "#f0ffe8"]} />
 
       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-7xl mx-auto items-center">
         {/* Left Content */}
         <div className="flex flex-col justify-center text-center lg:text-left">
+          {/* Decorative ECG/pulse SVG animation */}
+          <div className="flex justify-center lg:justify-start mb-4">
+            <svg viewBox="0 0 200 60" className="w-48 h-12 opacity-30">
+              <motion.path
+                d="M0,30 L40,30 L50,10 L60,50 L70,30 L100,30 L110,15 L120,45 L130,30 L200,30"
+                stroke="var(--color-accent-primary)"
+                strokeWidth="2"
+                fill="none"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              />
+            </svg>
+          </div>
+
           <motion.h1
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-4xl sm:text-5xl md:text-6xl font-playfair font-semibold text-slate-900 mb-6 leading-tight tracking-tight"
+            className="text-5xl md:text-6xl font-thin text-slate-900 mb-6 leading-tight tracking-tight"
           >
-            Healthcare App Development Services
+            Healthcare App{" "}
+            <span
+              style={{
+                background:
+                  "linear-gradient(90deg, var(--color-accent-primary), #22c55e)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              Development
+            </span>{" "}
+            Services
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-            className="text-lg md:text-xl font-quicksand text-slate-600 mb-8 max-w-xl lg:max-w-none mx-auto lg:mx-0 leading-relaxed"
+            className="text-lg md:text-xl text-slate-600 mb-8 max-w-xl lg:max-w-none mx-auto lg:mx-0 leading-relaxed"
           >
-            Let your business leverage healthcare mobility solutions to connect practitioners, patients, fitness trainers, and medical companies.
+            Let your business leverage healthcare mobility solutions to connect
+            practitioners, patients, fitness trainers, and medical companies.
           </motion.p>
 
-          <motion.button
+          <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
-            whileHover={{ scale: 1.05, boxShadow: "0 10px 20px rgba(255, 165, 0, 0.3)" }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-orange-500 hover:bg-orange-600 text-white font-quicksand font-semibold py-3 px-8 rounded-full shadow-md transition-all duration-300 ease-in-out self-center lg:self-start"
-           onClick={goContact}
+            className="self-center lg:self-start"
           >
-            Get Started
-          </motion.button>
-
-          {/* Stats */}
-        
+            <motion.button
+              ref={magnet.ref as React.RefObject<HTMLButtonElement>}
+              style={
+                {
+                  x: magnet.x,
+                  y: magnet.y,
+                  background: "var(--color-accent-primary)",
+                } as React.CSSProperties
+              }
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="text-white font-semibold py-3 px-8 rounded-full shadow-md transition-all duration-300 ease-in-out"
+              onClick={goContact}
+            >
+              Get Started
+            </motion.button>
+          </motion.div>
         </div>
 
         {/* Right Image Area */}
         <div className="relative flex items-center justify-center h-96 lg:h-[500px] w-full">
-          {/* Doctor Images */}
-          <motion.div
-            initial={{ opacity: 0, x: 50, rotate: 5 }}
-            animate={{ opacity: 1, x: 0, rotate: 0 }}
-            transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
-            className="absolute z-10 w-48 h-64 md:w-64 md:h-80 lg:w-72 lg:h-96 overflow-hidden rounded-2xl shadow-2xl"
-            style={{
-              backgroundImage: `url(${doctorImage1})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              top: '10%',
-              left: '10%',
-              transform: 'rotate(-5deg)'
-            }}
-          />
-          <motion.div
-            initial={{ opacity: 0, x: -50, rotate: -5 }}
-            animate={{ opacity: 1, x: 0, rotate: 0 }}
-            transition={{ duration: 1, delay: 0.7, ease: "easeOut" }}
-            className="absolute z-10 w-48 h-64 md:w-64 md:h-80 lg:w-72 lg:h-96 overflow-hidden rounded-2xl shadow-2xl"
-            style={{
-              backgroundImage: `url(${doctorImage2})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              bottom: '10%',
-              right: '10%',
-              transform: 'rotate(5deg)'
-            }}
-          />
+          <TiltCard>
+            <motion.div
+              initial={{ opacity: 0, x: 50, rotate: 5 }}
+              animate={{ opacity: 1, x: 0, rotate: 0 }}
+              transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
+              className="absolute z-10 w-48 h-64 md:w-64 md:h-80 lg:w-72 lg:h-96 overflow-hidden rounded-2xl shadow-2xl"
+              style={{
+                backgroundImage: `url(${doctorImage1})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                top: "10%",
+                left: "10%",
+                transform: "rotate(-5deg)",
+              }}
+            />
+          </TiltCard>
 
-          {/* Decorative Circles */}
-          <div className="absolute top-1/4 left-1/4 w-6 h-6 bg-cyan-400 rounded-full animate-pulse" />
-          <div className="absolute bottom-1/4 right-1/4 w-8 h-8 bg-orange-400 rounded-full animate-pulse" />
+          <TiltCard>
+            <motion.div
+              initial={{ opacity: 0, x: -50, rotate: -5 }}
+              animate={{ opacity: 1, x: 0, rotate: 0 }}
+              transition={{ duration: 1, delay: 0.7, ease: "easeOut" }}
+              className="absolute z-10 w-48 h-64 md:w-64 md:h-80 lg:w-72 lg:h-96 overflow-hidden rounded-2xl shadow-2xl"
+              style={{
+                backgroundImage: `url(${doctorImage2})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                bottom: "10%",
+                right: "10%",
+                transform: "rotate(5deg)",
+              }}
+            />
+          </TiltCard>
+
+          <div
+            className="absolute top-1/4 left-1/4 w-6 h-6 rounded-full animate-pulse"
+            style={{ background: "var(--color-accent-primary)", opacity: 0.5 }}
+          />
+          <div
+            className="absolute bottom-1/4 right-1/4 w-8 h-8 bg-cyan-400 rounded-full animate-pulse"
+          />
         </div>
       </div>
     </section>

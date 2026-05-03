@@ -1,5 +1,9 @@
 import { motion } from "framer-motion";
 import { CheckCircle } from "lucide-react";
+import GradientMesh from "../../lib/GradientMesh";
+import ScrollReveal from "../../lib/ScrollReveal";
+import TiltCard from "../../lib/TiltCard";
+import { useMagneticButton } from "../../lib/useMagneticButton";
 
 const reasons = [
   {
@@ -45,87 +49,115 @@ const charVariant = {
   visible: { opacity: 1, y: 0 },
 };
 
-// Content fade-in variant
-const containerVariant = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.2,
-    },
-  },
-};
-
-const itemVariant = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0 },
-};
+const lazyDoStart = "Why Choose ".length;
+const lazyDoEnd = lazyDoStart + "Lazy Do".length;
 
 const WhyChooseUs = () => {
   const headingText = "Why Choose Lazy Do ?";
+  const mag = useMagneticButton();
 
   return (
-    <section className="w-full py-24 px-6 md:px-20 bg-white">
-      {/* Animated Heading */}
-      <motion.div
-        variants={headingVariant}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        className="max-w-4xl mx-auto text-center mb-6 flex flex-wrap justify-center"
-      >
-        {headingText.split("").map((char, index) => (
-          <motion.span
-            key={index}
-            variants={charVariant}
-            className="text-3xl md:text-5xl font-bold text-gray-900"
-          >
-            {char === " " ? "\u00A0" : char}
-          </motion.span>
-        ))}
-      </motion.div>
+    <section className="relative w-full py-24 px-6 md:px-20 overflow-hidden">
+      <GradientMesh colors={["#d4f0e8", "#fde8e1", "#fef3cd"]} />
 
-      {/* Subtext */}
-      <motion.p
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-lg md:text-xl text-gray-600 leading-relaxed text-center mb-16"
-      >
-        A partnership built on trust, innovation, and value.
-      </motion.p>
+      <div className="relative z-10">
+        {/* Animated Heading */}
+        <motion.div
+          variants={headingVariant}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="max-w-4xl mx-auto text-center mb-6 flex flex-wrap justify-center"
+        >
+          {headingText.split("").map((char, index) => {
+            const isAccent = index >= lazyDoStart && index < lazyDoEnd;
+            return (
+              <motion.span
+                key={index}
+                variants={charVariant}
+                className="text-4xl md:text-5xl font-thin"
+                style={
+                  isAccent
+                    ? {
+                        background:
+                          "linear-gradient(135deg,var(--color-accent-primary),var(--color-accent-warm))",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                      }
+                    : { color: "#111827" }
+                }
+              >
+                {char === " " ? " " : char}
+              </motion.span>
+            );
+          })}
+        </motion.div>
 
-      {/* Animated List */}
-      <motion.div
-        variants={containerVariant}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10"
-      >
-        {reasons.map((item, index) => (
-          <motion.div
-            key={index}
-            variants={itemVariant}
-            className="flex items-start space-x-4"
+        {/* Subtext */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-lg md:text-xl text-gray-600 leading-relaxed text-center mb-16"
+        >
+          A partnership built on trust, innovation, and value.
+        </motion.p>
+
+        {/* Animated List */}
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+          {reasons.map((item, index) => (
+            <ScrollReveal key={index} direction="up" delay={index * 0.1}>
+              <TiltCard>
+                <div className="glass-card rounded-2xl p-6 flex items-start space-x-4 h-full">
+                  <motion.div
+                    initial={{ scale: 0, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.3, delay: index * 0.15 }}
+                  >
+                    <CheckCircle
+                      className="mt-1 shrink-0"
+                      size={24}
+                      style={{ color: "var(--color-accent-primary)" }}
+                    />
+                  </motion.div>
+                  <div>
+                    <h4 className="text-lg font-semibold text-gray-900 mb-1">
+                      {item.title}
+                    </h4>
+                    <p className="text-gray-600 text-base leading-relaxed">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+              </TiltCard>
+            </ScrollReveal>
+          ))}
+        </div>
+
+        {/* CTA */}
+        <motion.div
+          className="text-center mt-16"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+        >
+          <motion.button
+            ref={mag.ref as React.RefObject<HTMLButtonElement>}
+            style={{
+              x: mag.x,
+              y: mag.y,
+              background:
+                "linear-gradient(135deg,var(--color-accent-primary),var(--color-accent-warm))",
+            }}
+            data-cursor="hover"
+            className="inline-flex items-center gap-3 px-8 py-4 text-white rounded-full font-light tracking-wide shadow-lg hover:shadow-xl transition-shadow duration-300"
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.97 }}
           >
-            <motion.div
-              initial={{ scale: 0, opacity: 0 }}
-              whileInView={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.3, delay: index * 0.15 }}
-            >
-              <CheckCircle className="text-red-500 mt-1" size={24} />
-            </motion.div>
-            <div>
-              <h4 className="text-lg font-semibold text-gray-900 mb-1">
-                {item.title}
-              </h4>
-              <p className="text-gray-600 text-base leading-relaxed">
-                {item.description}
-              </p>
-            </div>
-          </motion.div>
-        ))}
-      </motion.div>
+            <span>Partner With Us</span>
+          </motion.button>
+        </motion.div>
+      </div>
     </section>
   );
 };

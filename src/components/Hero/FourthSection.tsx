@@ -1,7 +1,10 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 import { TypeAnimation } from "react-type-animation";
 import { ArrowUpRight, BookOpen, Sparkles } from "lucide-react";
+import ScrollReveal from "../../lib/ScrollReveal";
+import GradientMesh from "../../lib/GradientMesh";
 
 const processSteps = [
   {
@@ -63,117 +66,112 @@ const TITLES = [
   "Continuous Excellence",
 ];
 
-// Flatten the sequence for TypeAnimation
 const sequence = TITLES.flatMap((title) => [title, 2000]);
 
 type ProcessStepProps = {
-  step: typeof processSteps[number];
+  step: (typeof processSteps)[number];
   index: number;
 };
 
 function ProcessStep({ step, index }: ProcessStepProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const circleRef = useRef(null);
+  const inView = useInView(circleRef, { once: false });
 
   return (
-    <motion.div
-      className="relative"
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: index * 0.1 }}
-      viewport={{ once: true }}
-    >
-      {/* Connecting Line */}
-      {index < processSteps.length - 1 && (
-        <div className="absolute left-16 top-32 w-0.5 h-24 bg-gradient-to-b from-gray-200 to-gray-100 z-0" />
-      )}
-      
-      <div
-        className="flex items-start space-x-8 py-12 px-8 hover:bg-white/30 transition-all duration-500 cursor-pointer group"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        {/* Number Circle */}
-        <div className="relative z-10">
-          <motion.div
-            className="w-16 h-16 rounded-full border-2 flex items-center justify-center bg-white/80 backdrop-blur-sm shadow-lg"
-            style={{
-              borderColor: step.color,
-              boxShadow: isHovered ? `0 8px 32px ${step.color}40` : `0 4px 16px ${step.color}20`,
-            }}
-            whileHover={{ scale: 1.1 }}
-            transition={{ duration: 0.3 }}
-          >
-            <span 
-              className="text-2xl font-light"
-              style={{ color: step.color }}
-            >
-              {step.number}
-            </span>
-          </motion.div>
-          
-          {/* Sparkle Effect */}
-          <motion.div
-            className="absolute -top-2 -right-2"
-            animate={isHovered ? { scale: [1, 1.2, 1], rotate: [0, 180, 360] } : {}}
-            transition={{ duration: 0.6 }}
-          >
-            <Sparkles size={16} style={{ color: step.accent }} />
-          </motion.div>
-        </div>
+    <ScrollReveal direction="left" delay={index * 0.08}>
+      <div className="relative">
+        {/* Connecting Line */}
+        {index < processSteps.length - 1 && (
+          <div className="absolute left-16 top-32 w-0.5 h-24 bg-gradient-to-b from-gray-200 to-gray-100 z-0" />
+        )}
 
-        {/* Content */}
-        <div className="flex-1">
-          <motion.h3 
-            className="text-3xl font-light mb-4 text-gray-800"
-            style={{ 
-              color: isHovered ? step.color : '#1f2937',
-              textShadow: isHovered ? `0 0 20px ${step.color}30` : 'none'
-            }}
-            transition={{ duration: 0.3 }}
-          >
-            {step.title}
-          </motion.h3>
-          
-          <p className="text-gray-600 text-lg leading-relaxed max-w-2xl">
-            {step.subtitle}
-          </p>
-          
-          {/* Accent Line */}
-          <motion.div
-            className="w-16 h-0.5 mt-6 rounded-full"
-            style={{ backgroundColor: step.color }}
-            initial={{ width: 0 }}
-            whileInView={{ width: 64 }}
-            transition={{ duration: 0.8, delay: index * 0.1 + 0.5 }}
-          />
-        </div>
-
-        {/* Arrow */}
-        <motion.div
-          className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          whileHover={{ x: 4 }}
+        <div
+          className="flex items-start space-x-8 py-12 px-8 hover:bg-white/30 transition-all duration-500 cursor-pointer group"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
         >
-          <ArrowUpRight size={24} style={{ color: step.color }} />
-        </motion.div>
+          {/* Number Circle */}
+          <div className="relative z-10" ref={circleRef}>
+            <motion.div
+              className="w-16 h-16 rounded-full border-2 flex items-center justify-center bg-white/80 backdrop-blur-sm shadow-lg"
+              style={{ borderColor: step.color }}
+              animate={{
+                boxShadow: inView
+                  ? [
+                      "0 0 0px var(--color-accent-primary)",
+                      "0 0 20px var(--color-accent-primary)",
+                      "0 0 0px var(--color-accent-primary)",
+                    ]
+                  : "none",
+              }}
+              transition={{ duration: 2, repeat: Infinity }}
+              whileHover={{ scale: 1.1 }}
+            >
+              <span className="text-2xl font-light" style={{ color: step.color }}>
+                {step.number}
+              </span>
+            </motion.div>
+
+            {/* Sparkle Effect */}
+            <motion.div
+              className="absolute -top-2 -right-2"
+              animate={isHovered ? { scale: [1, 1.2, 1], rotate: [0, 180, 360] } : {}}
+              transition={{ duration: 0.6 }}
+            >
+              <Sparkles size={16} style={{ color: step.accent }} />
+            </motion.div>
+          </div>
+
+          {/* Content */}
+          <div className="flex-1">
+            <motion.h3
+              className="text-3xl font-light mb-4 text-gray-800"
+              style={{
+                color: isHovered ? step.color : "#1f2937",
+                textShadow: isHovered ? `0 0 20px ${step.color}30` : "none",
+              }}
+              transition={{ duration: 0.3 }}
+            >
+              {step.title}
+            </motion.h3>
+
+            <p className="text-gray-600 text-lg leading-relaxed max-w-2xl">
+              {step.subtitle}
+            </p>
+
+            {/* Accent Line */}
+            <motion.div
+              className="w-16 h-0.5 mt-6 rounded-full"
+              style={{ backgroundColor: step.color }}
+              initial={{ width: 0 }}
+              whileInView={{ width: 64 }}
+              transition={{ duration: 0.8, delay: index * 0.1 + 0.5 }}
+            />
+          </div>
+
+          {/* Arrow */}
+          <motion.div
+            className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            whileHover={{ x: 4 }}
+          >
+            <ArrowUpRight size={24} style={{ color: step.color }} />
+          </motion.div>
+        </div>
       </div>
-    </motion.div>
+    </ScrollReveal>
   );
 }
 
 export default function LuxuryLightProcess() {
   return (
-    <section className="relative min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 overflow-hidden py-20 px-4">
-      {/* Luxury Background Elements */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-200 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-pink-200 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
-        <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-cyan-200 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '4s' }} />
-      </div>
+    <section className="relative min-h-screen overflow-hidden py-20 px-4">
+      <GradientMesh colors={["#fde8e1", "#e8e6ff", "#fef3cd"]} />
 
       <div className="container mx-auto max-w-6xl relative z-10">
         {/* Header */}
         <div className="text-center mb-20">
-          <motion.div 
+          <motion.div
             className="inline-flex items-center mb-6 text-gray-500 justify-center"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -186,11 +184,10 @@ export default function LuxuryLightProcess() {
           </motion.div>
 
           <motion.h2
-            className="text-6xl md:text-7xl font-extralight mb-8 tracking-tight bg-clip-text text-transparent leading-tight"
+            className="text-5xl md:text-7xl font-thin mb-8 tracking-tight bg-clip-text text-transparent leading-tight"
             style={{
               backgroundImage:
                 "linear-gradient(135deg, #8B5CF6, #EC4899, #06B6D4, #10B981, #F59E0B, #EF4444)",
-              textShadow: "0 0 40px rgba(139, 92, 246, 0.3)",
             }}
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -206,13 +203,15 @@ export default function LuxuryLightProcess() {
             />
           </motion.h2>
 
-          <motion.p 
+          <motion.p
             className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Experience our meticulously crafted workflow designed to transform your vision into exceptional digital experiences with unparalleled attention to detail.
+            Experience our meticulously crafted workflow designed to transform
+            your vision into exceptional digital experiences with unparalleled
+            attention to detail.
           </motion.p>
         </div>
 
@@ -224,7 +223,7 @@ export default function LuxuryLightProcess() {
         </div>
 
         {/* Bottom Accent */}
-        <motion.div 
+        <motion.div
           className="mt-20 text-center"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}

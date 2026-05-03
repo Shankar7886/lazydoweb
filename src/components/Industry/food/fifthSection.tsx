@@ -23,6 +23,9 @@ import {
   Key,
   PlusSquare,
 } from "lucide-react";
+import ScrollReveal from "../../../lib/ScrollReveal";
+import TiltCard from "../../../lib/TiltCard";
+import GradientMesh from "../../../lib/GradientMesh";
 
 type PanelType = "customer" | "admin" | "contact" | "restaurant";
 
@@ -88,22 +91,26 @@ const InteractiveFeatureSection: React.FC = () => {
   const panels: PanelType[] = ["customer", "admin", "contact", "restaurant"];
 
   return (
-    <section className="relative bg-black text-white py-20 px-6 lg:px-20">
-      <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl md:text-5xl font-semibold text-center mb-12">
-          <span className="text-white">On-Demand   Food Delivery</span>{" "}
-          <span className="text-orange-400"> App Features</span>
+    <section className="relative overflow-hidden bg-black text-white py-20 px-6 lg:px-20">
+      <GradientMesh colors={["#fef3cd", "#fde8e1", "#ffe0cc"]} intensity={0.1} />
+
+      <div className="relative z-10 max-w-6xl mx-auto">
+        <h2 className="text-4xl md:text-5xl font-thin text-center mb-12">
+          <span className="text-white">On-Demand Food Delivery</span>{" "}
+          <span style={{ color: "var(--color-accent-primary)" }}>App Features</span>
         </h2>
+
         <div className="flex gap-4 mb-10 flex-wrap justify-center">
           {panels.map((panel) => (
             <button
               key={panel}
               onClick={() => setSelected(panel)}
-              className={`px-4 py-2 rounded-full transition ${
+              className="px-4 py-2 rounded-full transition"
+              style={
                 selected === panel
-                  ? "bg-orange-500 text-black"
-                  : "bg-gray-800 text-gray-300"
-              }`}
+                  ? { background: "var(--color-accent-primary)", color: "#fff" }
+                  : { background: "#1f2937", color: "#d1d5db" }
+              }
             >
               {panel.charAt(0).toUpperCase() + panel.slice(1)} Panel
             </button>
@@ -120,16 +127,16 @@ const InteractiveFeatureSection: React.FC = () => {
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
           >
             {panelFeatures[selected].map((f, i) => (
-              <motion.div
-                key={i}
-                className="flex items-center gap-3 text-gray-300 hover:text-white"
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.1, duration: 0.4 }}
-              >
-                {f.icon}
-                <span>{f.title}</span>
-              </motion.div>
+              <ScrollReveal key={i} direction="up" delay={i * 0.05}>
+                <TiltCard>
+                  <div className="glass-card rounded-2xl p-6 flex items-center gap-3 text-gray-300 hover:text-white">
+                    <span style={{ color: "var(--color-accent-primary)" }}>
+                      {f.icon}
+                    </span>
+                    <span>{f.title}</span>
+                  </div>
+                </TiltCard>
+              </ScrollReveal>
             ))}
           </motion.div>
         </AnimatePresence>

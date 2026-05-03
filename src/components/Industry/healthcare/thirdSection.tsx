@@ -1,4 +1,7 @@
 import { motion } from "framer-motion";
+import ScrollReveal from "../../../lib/ScrollReveal";
+import TiltCard from "../../../lib/TiltCard";
+import GradientMesh from "../../../lib/GradientMesh";
 
 const processSteps = [
   {
@@ -25,17 +28,26 @@ const processSteps = [
 
 export default function HealthcareProcessSection() {
   return (
-    <section className="relative py-24 px-6 bg-white overflow-hidden font-quicksand">
+    <section className="relative py-24 px-6 overflow-hidden">
+      <GradientMesh colors={["#d4f0e8", "#e8f4fd", "#f0ffe8"]} intensity={0.5} />
+
       {/* Heading */}
-      <div className="max-w-4xl mx-auto text-center mb-16">
+      <div className="relative z-10 max-w-4xl mx-auto text-center mb-16">
         <motion.h2
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
-          className="text-4xl md:text-5xl font-playfair text-slate-900 leading-snug"
+          className="text-4xl md:text-5xl font-thin text-slate-900 leading-snug"
         >
           Our Process: From Vision to{" "}
-          <span className="bg-gradient-to-r from-sky-500 to-blue-400 text-transparent bg-clip-text">
+          <span
+            style={{
+              background: "linear-gradient(90deg, var(--color-accent-primary), #22c55e)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
+          >
             Interactive Innovation
           </span>
         </motion.h2>
@@ -51,37 +63,30 @@ export default function HealthcareProcessSection() {
       </div>
 
       {/* Process Grid */}
-      <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+      <div className="relative z-10 grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
         {processSteps.map((step, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: index * 0.2 }}
-            className="p-6 rounded-xl border border-slate-100 shadow-sm bg-gradient-to-br from-slate-50 to-white hover:shadow-md transition"
-          >
-            <div className="mb-4">
-              <div className="w-12 h-12 flex items-center justify-center bg-gradient-to-r from-sky-500 to-blue-400 text-white rounded-full text-lg font-semibold shadow">
-                {index + 1}
+          <ScrollReveal key={index} direction="up" delay={index * 0.1}>
+            <TiltCard>
+              <div className="glass-card rounded-2xl p-6">
+                <div className="mb-4">
+                  <div
+                    className="w-12 h-12 flex items-center justify-center text-white rounded-full text-lg font-semibold shadow"
+                    style={{ background: "var(--color-accent-primary)" }}
+                  >
+                    {index + 1}
+                  </div>
+                </div>
+                <h3 className="text-xl md:text-2xl font-semibold text-slate-800 mb-2">
+                  {step.title}
+                </h3>
+                <p className="text-slate-600 text-md leading-relaxed">
+                  {step.description}
+                </p>
               </div>
-            </div>
-            <h3 className="text-xl md:text-2xl font-semibold text-slate-800 mb-2 font-playfair">
-              {step.title}
-            </h3>
-            <p className="text-slate-600 text-md leading-relaxed">
-              {step.description}
-            </p>
-          </motion.div>
+            </TiltCard>
+          </ScrollReveal>
         ))}
       </div>
-
-      {/* Decorative Shapes */}
-      <motion.div
-        initial={{ scale: 0, opacity: 0 }}
-        whileInView={{ scale: 1, opacity: 0.05 }}
-        transition={{ duration: 1, delay: 0.5 }}
-        className="absolute -bottom-16 right-0 w-80 h-80 bg-gradient-to-br from-blue-400 to-sky-300 rounded-full"
-      />
     </section>
   );
 }

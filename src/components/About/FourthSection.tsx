@@ -1,49 +1,64 @@
 import { motion } from "framer-motion";
-
 import ImageHostLink from "../../variable";
+import GradientMesh from "../../lib/GradientMesh";
+import ScrollReveal from "../../lib/ScrollReveal";
+import TiltCard from "../../lib/TiltCard";
 
 const AboutUsSection = () => {
   return (
-    <section className="w-full py-24 px-6 md:px-20 bg-white overflow-hidden">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+    <section className="relative w-full py-24 px-6 md:px-20 overflow-hidden">
+      <GradientMesh colors={["#fde8e1", "#e8e6ff", "#fef3cd"]} />
+
+      <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         {/* Left: Text Content */}
-        <motion.div
-          initial={{ opacity: 0, x: -40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 text-left tracking-tight">
-            About Us
-          </h2>
-          <div className="h-1 w-20 bg-red-500 mb-6 rounded-full" />
-          <p className="text-lg md:text-xl text-gray-600 leading-relaxed text-left">
-            <span className="font-semibold text-gray-800">
-              Lazy Do
-            </span>{" "}
-            is a leading software development company dedicated to providing
-            innovative and tailored solutions to businesses of all sizes. With
-            our team of experienced developers and cutting-edge technologies,
-            we strive to deliver high-quality software products that meet our
-            clients’ unique requirements.
-          </p>
-        </motion.div>
+        <ScrollReveal direction="up" delay={0}>
+          <TiltCard>
+            <div className="glass-card rounded-2xl p-6">
+              <h2
+                className="text-4xl md:text-5xl font-thin mb-6 text-left tracking-tight"
+              >
+                <span
+                  style={{
+                    background:
+                      "linear-gradient(135deg,var(--color-accent-primary),var(--color-accent-warm))",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
+                >
+                  About Us
+                </span>
+              </h2>
+              <div
+                className="h-1 w-20 mb-6 rounded-full"
+                style={{ backgroundColor: "var(--color-accent-primary)" }}
+              />
+              <p className="text-lg md:text-xl text-gray-600 leading-relaxed text-left">
+                <span className="font-semibold text-gray-800">Lazy Do</span>{" "}
+                is a leading software development company dedicated to providing
+                innovative and tailored solutions to businesses of all sizes. With
+                our team of experienced developers and cutting-edge technologies,
+                we strive to deliver high-quality software products that meet our
+                clients' unique requirements.
+              </p>
+            </div>
+          </TiltCard>
+        </ScrollReveal>
 
         {/* Right: Video */}
-        <motion.div
-          initial={{ opacity: 0, x: 40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-          className="w-full aspect-video rounded-xl overflow-hidden shadow-xl"
-        >
-          <video
-            src={`${ImageHostLink}team.mp4`} // Replace with your actual path
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover"
-          />
-        </motion.div>
+        <ScrollReveal direction="up" delay={0.1}>
+          <motion.div
+            className="w-full aspect-video rounded-xl overflow-hidden shadow-xl"
+          >
+            <video
+              src={`${ImageHostLink}team.mp4`}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover"
+            />
+          </motion.div>
+        </ScrollReveal>
       </div>
     </section>
   );

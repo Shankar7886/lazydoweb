@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Canvas } from "@react-three/fiber";
+import { Float } from "@react-three/drei";
+import { motion } from "framer-motion";
 import emailjs from 'emailjs-com';
+import { useMagneticButton } from "../../lib/useMagneticButton";
 import {
   Mail,
   Phone,
@@ -34,6 +37,8 @@ interface FormErrors {
 }
 
 const ContactUs: React.FC = () => {
+  const mag = useMagneticButton();
+
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
@@ -191,6 +196,12 @@ const ContactUs: React.FC = () => {
           <ambientLight intensity={0.8} />
           <directionalLight position={[10, 10, 10]} intensity={0.5} />
           <pointLight position={[-10, -10, -10]} intensity={0.3} />
+          <Float speed={1} rotationIntensity={0.5} floatIntensity={0.8}>
+            <mesh>
+              <torusKnotGeometry args={[1, 0.3, 100, 16]} />
+              <meshPhysicalMaterial color="#c8392b" transparent opacity={0.2} metalness={0.5} roughness={0.3} />
+            </mesh>
+          </Float>
         </Canvas>
       </div>
 

@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useState, useRef } from "react";
+import GradientMesh from "../../../lib/GradientMesh";
 
 interface HighlightWord {
   text: string;
@@ -37,10 +38,7 @@ const WordHighlight = ({ children, index }: WordHighlightProps) => {
       className="relative cursor-pointer inline-block"
       onMouseEnter={() => setHoveredWord(index)}
       onMouseLeave={() => setHoveredWord(null)}
-      whileHover={{
-        scale: 1.02,
-        transition: { duration: 0.2, ease: "easeOut" },
-      }}
+      whileHover={{ scale: 1.02, transition: { duration: 0.2, ease: "easeOut" } }}
     >
       <span
         className={`${
@@ -76,8 +74,10 @@ export default function HealthcareSolutionsSection() {
   return (
     <section
       ref={sectionRef}
-      className="py-24 px-6 text-center relative overflow-hidden font-quicksand"
+      className="py-24 px-6 text-center relative overflow-hidden"
     >
+      <GradientMesh colors={["#d4f0e8", "#e8f4fd", "#f0ffe8"]} intensity={0.5} />
+
       {/* Decorative Motion Elements */}
       <motion.div
         style={{ y }}
@@ -99,7 +99,7 @@ export default function HealthcareSolutionsSection() {
         initial={{ opacity: 0, y: 60 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-        className="max-w-5xl mx-auto relative"
+        className="max-w-5xl mx-auto relative z-10"
       >
         {/* Header */}
         <motion.div
@@ -108,7 +108,7 @@ export default function HealthcareSolutionsSection() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="mb-12"
         >
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-playfair font-semibold leading-tight tracking-tight text-slate-800">
+          <h2 className="text-4xl md:text-5xl font-thin leading-tight tracking-tight text-slate-800">
             Revolutionizing Care Through Technology
           </h2>
           <motion.div
@@ -129,7 +129,8 @@ export default function HealthcareSolutionsSection() {
             <p className="text-xl md:text-2xl font-light text-slate-600 leading-relaxed tracking-wide">
               Revolutionizing Care with{" "}
               <WordHighlight index="1">Smart Healthcare</WordHighlight> App
-              Development. Join the future of healthcare with Lazy Do — your reliable partner for developing{" "}
+              Development. Join the future of healthcare with Lazy Do — your
+              reliable partner for developing{" "}
               <WordHighlight index="2">mobile-first</WordHighlight> healthcare
               ecosystems. We help firms bridge the gap between healthcare
               professionals, patients, fitness coaches, and hospitals using{" "}
@@ -144,9 +145,13 @@ export default function HealthcareSolutionsSection() {
           >
             <p className="text-xl md:text-2xl font-light text-slate-600 leading-relaxed tracking-wide">
               The healthcare landscape has evolved drastically, driven by{" "}
-              <WordHighlight index="4">transparency and connectivity</WordHighlight>. At Lazy, we empower hospitals, pharma companies, and medical device manufacturers to{" "}
-              <WordHighlight index="5">innovate at scale</WordHighlight>. As a top-tier healthcare app development company, we design{" "}
-              <WordHighlight index="6">cutting-edge</WordHighlight> solutions for pharmaceuticals, biotech, med-tech, and agritech-health industries.
+              <WordHighlight index="4">transparency and connectivity</WordHighlight>.
+              At Lazy, we empower hospitals, pharma companies, and medical device
+              manufacturers to{" "}
+              <WordHighlight index="5">innovate at scale</WordHighlight>. As a
+              top-tier healthcare app development company, we design{" "}
+              <WordHighlight index="6">cutting-edge</WordHighlight> solutions for
+              pharmaceuticals, biotech, med-tech, and agritech-health industries.
             </p>
           </motion.div>
 
@@ -156,9 +161,13 @@ export default function HealthcareSolutionsSection() {
             transition={{ duration: 0.8, delay: 0.7 }}
           >
             <p className="text-xl md:text-2xl font-light text-slate-600 leading-relaxed tracking-wide">
-              Our team of experienced developers combines domain knowledge and advanced tech to build{" "}
-              <WordHighlight index="7">future-proofed</WordHighlight> solutions. From real-time diagnostics to smart devices, our healthcare apps integrate{" "}
-              <WordHighlight index="8">AI and Cloud</WordHighlight>—ensuring your services are not only efficient, but exceptional.
+              Our team of experienced developers combines domain knowledge and
+              advanced tech to build{" "}
+              <WordHighlight index="7">future-proofed</WordHighlight> solutions.
+              From real-time diagnostics to smart devices, our healthcare apps
+              integrate{" "}
+              <WordHighlight index="8">AI and Cloud</WordHighlight>—ensuring your
+              services are not only efficient, but exceptional.
             </p>
           </motion.div>
         </div>

@@ -1,16 +1,25 @@
 import { motion, useInView, useMotionValue, animate } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import TiltCard from "../../lib/TiltCard";
 
 // Stats data with luxury-focused metrics
 const stats = [
   { number: 150, label: "Premium Projects", suffix: "+", icon: "⟡" },
   { number: 99, label: "Client Satisfaction", suffix: "%", icon: "⟡" },
   { number: 24, label: "Concierge Support", suffix: "/7", icon: "⟡" },
-  { number: 15, label: "Years Excellence", suffix: "+", icon: "⟡" }
+  { number: 15, label: "Years Excellence", suffix: "+", icon: "⟡" },
 ];
 
 // Animated Counter Component
-function AnimatedCounter({ value, suffix = "", icon }: { value: number; suffix?: string; icon: string }) {
+function AnimatedCounter({
+  value,
+  suffix = "",
+  icon,
+}: {
+  value: number;
+  suffix?: string;
+  icon: string;
+}) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
   const motionValue = useMotionValue(0);
@@ -23,7 +32,7 @@ function AnimatedCounter({ value, suffix = "", icon }: { value: number; suffix?:
         ease: [0.16, 1, 0.3, 1],
         onUpdate(latest) {
           setDisplayValue(Math.round(latest));
-        }
+        },
       });
       return () => controls.stop();
     }
@@ -39,11 +48,14 @@ function AnimatedCounter({ value, suffix = "", icon }: { value: number; suffix?:
       >
         <div className="text-4xl md:text-5xl font-thin text-neutral-800 tracking-tight">
           {displayValue}
-          <span className="text-rose-600 ml-1">{suffix}</span>
+          <span className="ml-1" style={{ color: "var(--color-accent-primary)" }}>
+            {suffix}
+          </span>
         </div>
-        
+
         <motion.div
-          className="absolute -top-6 -right-6 text-rose-500 text-xl opacity-70"
+          className="absolute -top-6 -right-6 text-xl opacity-70"
+          style={{ color: "var(--color-accent-primary)" }}
           initial={{ rotate: -45, opacity: 0 }}
           animate={inView ? { rotate: 0, opacity: 0.7 } : {}}
           transition={{ duration: 1.5, delay: 0.6 }}
@@ -58,21 +70,7 @@ function AnimatedCounter({ value, suffix = "", icon }: { value: number; suffix?:
 // Main Section
 export default function LuxuryStatsSection() {
   return (
-    <div className="relative py-12 px-6 bg-gradient-to-b from-stone-50 via-white to-rose-50/20 overflow-hidden">
-      {/* Geometric Background Pattern */}
-      <div className="absolute inset-0 opacity-[0.02]">
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-neutral-900 to-transparent" 
-             style={{
-               backgroundImage: `radial-gradient(circle at 25% 25%, rgba(0,0,0,0.1) 1px, transparent 1px),
-                                 radial-gradient(circle at 75% 75%, rgba(0,0,0,0.1) 1px, transparent 1px)`,
-               backgroundSize: '60px 60px'
-             }} />
-      </div>
-
-      {/* Floating Decorative Elements */}
-      <div className="absolute top-32 left-16 w-32 h-32 bg-gradient-to-br from-rose-200/30 to-transparent rounded-full blur-2xl" />
-      <div className="absolute bottom-32 right-16 w-48 h-48 bg-gradient-to-br from-stone-200/40 to-transparent rounded-full blur-3xl" />
-
+    <div className="mesh-bg relative py-12 px-6 overflow-hidden">
       {/* Header Section */}
       <motion.div
         className="text-center mb-12"
@@ -88,19 +86,43 @@ export default function LuxuryStatsSection() {
           viewport={{ once: true }}
           transition={{ duration: 1.2, delay: 0.3 }}
         >
-          <div className="w-8 h-px bg-gradient-to-r from-transparent via-rose-400 to-rose-600" />
-          <span className="text-rose-600 text-xs font-medium tracking-[0.3em] uppercase">Distinction</span>
-          <div className="w-8 h-px bg-gradient-to-r from-rose-600 via-rose-400 to-transparent" />
+          <div
+            className="w-8 h-px bg-gradient-to-r from-transparent"
+            style={{
+              background:
+                "linear-gradient(to right, transparent, var(--color-accent-warm), var(--color-accent-primary))",
+            }}
+          />
+          <span
+            className="text-xs font-medium tracking-[0.3em] uppercase"
+            style={{ color: "var(--color-accent-primary)" }}
+          >
+            Distinction
+          </span>
+          <div
+            className="w-8 h-px"
+            style={{
+              background:
+                "linear-gradient(to right, var(--color-accent-primary), var(--color-accent-warm), transparent)",
+            }}
+          />
         </motion.div>
-        
+
         <h2 className="text-3xl md:text-4xl font-extralight text-neutral-800 tracking-tight leading-tight">
-          Where <span className="text-rose-600 font-light italic">Excellence</span> Meets Innovation
+          Where{" "}
+          <span
+            className="font-light italic"
+            style={{ color: "var(--color-accent-primary)" }}
+          >
+            Excellence
+          </span>{" "}
+          Meets Innovation
         </h2>
       </motion.div>
 
       {/* Stats Container */}
       <div className="relative max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-0">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-4">
           {stats.map((stat, index) => (
             <motion.div
               key={index}
@@ -110,53 +132,60 @@ export default function LuxuryStatsSection() {
               viewport={{ once: true }}
               transition={{ duration: 1, delay: index * 0.15 }}
             >
-              {/* Vertical Divider - Only show between items on desktop */}
+              {/* Vertical Divider */}
               {index < stats.length - 1 && (
                 <div className="hidden md:block absolute right-0 top-1/2 transform -translate-y-1/2 w-px h-32 bg-gradient-to-b from-transparent via-stone-300 to-transparent" />
               )}
 
-              <div className="relative px-6 py-8 text-center transition-all duration-700 group-hover:scale-105">
-                {/* Hover Background Effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/60 to-stone-50/60 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 backdrop-blur-sm" />
-                
-                {/* Top Decorative Line */}
-                <motion.div
-                  className="w-12 h-px bg-gradient-to-r from-transparent via-rose-400 to-transparent mx-auto mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  initial={{ scaleX: 0 }}
-                  whileInView={{ scaleX: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 1, delay: 1 + index * 0.1 }}
-                />
-
-                {/* Stat Content */}
-                <div className="relative z-10">
-                  <AnimatedCounter value={stat.number} suffix={stat.suffix} icon={stat.icon} />
-                  
+              <TiltCard glareEffect>
+                <div className="glass-card rounded-2xl p-8 text-center w-full">
+                  {/* Top Decorative Line */}
                   <motion.div
-                    className="mt-3 text-neutral-600 font-light text-sm md:text-base tracking-wide"
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
+                    className="w-12 h-px mx-auto mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{
+                      background:
+                        "linear-gradient(to right, transparent, var(--color-accent-warm), transparent)",
+                    }}
+                    initial={{ scaleX: 0 }}
+                    whileInView={{ scaleX: 1 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: 1.2 + index * 0.1 }}
+                    transition={{ duration: 1, delay: 1 + index * 0.1 }}
+                  />
+
+                  {/* Stat Content */}
+                  <div className="relative z-10">
+                    <AnimatedCounter
+                      value={stat.number}
+                      suffix={stat.suffix}
+                      icon={stat.icon}
+                    />
+
+                    <motion.div
+                      className="mt-3 text-neutral-600 font-light text-sm md:text-base tracking-wide"
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.8, delay: 1.2 + index * 0.1 }}
+                    >
+                      {stat.label}
+                    </motion.div>
+                  </div>
+
+                  {/* Bottom Decorative Element */}
+                  <motion.div
+                    className="mt-4 flex justify-center"
+                    initial={{ opacity: 0, scale: 0 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 1.4 + index * 0.1 }}
                   >
-                    {stat.label}
+                    <div
+                      className="w-1 h-1 rounded-full opacity-60 group-hover:opacity-100 transition-opacity duration-300"
+                      style={{ backgroundColor: "var(--color-accent-warm)" }}
+                    />
                   </motion.div>
                 </div>
-
-                {/* Bottom Decorative Element */}
-                <motion.div
-                  className="mt-4 flex justify-center"
-                  initial={{ opacity: 0, scale: 0 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 1.4 + index * 0.1 }}
-                >
-                  <div className="w-1 h-1 bg-rose-400 rounded-full opacity-60 group-hover:opacity-100 transition-opacity duration-300" />
-                </motion.div>
-
-                {/* Subtle Shadow on Hover */}
-                <div className="absolute inset-0 rounded-2xl shadow-2xl shadow-stone-200/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              </div>
+              </TiltCard>
             </motion.div>
           ))}
         </div>
@@ -171,9 +200,24 @@ export default function LuxuryStatsSection() {
         transition={{ duration: 1, delay: 1.8 }}
       >
         <div className="flex items-center gap-6">
-          <div className="w-12 h-px bg-gradient-to-r from-transparent via-rose-300 to-stone-300" />
-          <div className="w-3 h-3 border border-rose-400 rounded-full bg-white shadow-sm" />
-          <div className="w-12 h-px bg-gradient-to-r from-stone-300 via-rose-300 to-transparent" />
+          <div
+            className="w-12 h-px"
+            style={{
+              background:
+                "linear-gradient(to right, transparent, var(--color-accent-warm), var(--color-accent-gold))",
+            }}
+          />
+          <div
+            className="w-3 h-3 border rounded-full bg-white shadow-sm"
+            style={{ borderColor: "var(--color-accent-warm)" }}
+          />
+          <div
+            className="w-12 h-px"
+            style={{
+              background:
+                "linear-gradient(to right, var(--color-accent-gold), var(--color-accent-warm), transparent)",
+            }}
+          />
         </div>
       </motion.div>
     </div>
