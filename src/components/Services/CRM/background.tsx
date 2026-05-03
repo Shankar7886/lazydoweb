@@ -239,10 +239,10 @@ const GridFlowParticles = () => {
             position={flowingDotRefs.current[index]?.position}
           >
             <sphereGeometry args={[0.045, 8, 8]} />
-            <meshBasicMaterial 
-              color="#6b7280" 
-              transparent 
-              opacity={0.1}
+            <meshBasicMaterial
+              color="#e85d3e"
+              transparent
+              opacity={0.15}
             />
           </mesh>
         </group>
