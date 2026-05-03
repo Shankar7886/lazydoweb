@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import ScrollReveal from "../../../lib/ScrollReveal";
+import TiltCard from "../../../lib/TiltCard";
 
 const features = {
   user: [
     "Content management capabilities",
-    "Add/Remove products", 
+    "Add/Remove products",
     "Cart",
     "Safe and secured",
     "Promotion and discount sections",
@@ -14,7 +16,7 @@ const features = {
   admin: [
     "User management",
     "Manage shipping methods",
-    "Manage payments", 
+    "Manage payments",
     "Manage products",
     "Manage app & store settings",
     "Database backup & restore",
@@ -24,61 +26,64 @@ const features = {
   ],
 };
 
+const cardVariants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.4,
+      delay: i * 0.02,
+      ease: [0.25, 0.1, 0.25, 1.0] as [number, number, number, number],
+    },
+  }),
+  exit: {
+    opacity: 0,
+    y: -8,
+    transition: { duration: 0.2 },
+  },
+};
+
 export default function LuxuryFeaturesRefined() {
   const [activeTab, setActiveTab] = useState("user");
-  const [hoveredIndex, setHoveredIndex] = useState<number|null>(null);
-
-  const cardVariants = {
-    hidden: { 
-      opacity: 0, 
-      y: 16,
-    },
-    visible: (i:number) => ({
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.4,
-        delay: i * 0.02,
-        ease: [0.25, 0.1, 0.25, 1.0]
-      }
-    }),
-    exit: {
-      opacity: 0,
-      y: -8,
-      transition: {
-        duration: 0.2
-      }
-    }
-  };
 
   return (
-    <div className="min-h-screen  text-slate-900">
+    <div className="min-h-screen text-slate-900">
       <div className="max-w-6xl mx-auto px-6 py-12">
-        
-        {/* Compact Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-12"
-        >
-          <div className="flex items-center mb-4">
-            <div className="w-0.5 h-8 bg-amber-500 mr-4"></div>
-            <span className="text-xs font-medium tracking-wider text-slate-500 uppercase">
-              Platform Capabilities
-            </span>
-          </div>
-          
-          <h1 className="text-4xl font-light mb-3 tracking-tight text-slate-900">
-            Features &amp; <span className="text-amber-600">Functionality</span>
-          </h1>
-          
-          <p className="text-sm text-slate-600 max-w-xl leading-relaxed">
-            Comprehensive solutions engineered for precision and exceptional user experience.
-          </p>
-        </motion.div>
+        {/* Header */}
+        <ScrollReveal direction="up">
+          <div className="mb-12">
+            <div className="flex items-center mb-4">
+              <div
+                className="w-0.5 h-8 mr-4"
+                style={{ background: "var(--color-accent-primary)" }}
+              />
+              <span className="text-xs font-medium tracking-wider text-slate-500 uppercase">
+                Platform Capabilities
+              </span>
+            </div>
 
-        {/* Compact Tab Navigation */}
+            <h2 className="text-4xl md:text-5xl font-thin mb-3 tracking-tight text-slate-900">
+              Features &amp;{" "}
+              <span
+                className="bg-clip-text text-transparent"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to right, var(--color-accent-primary), var(--color-accent-warm))",
+                }}
+              >
+                Functionality
+              </span>
+            </h2>
+
+            <p className="text-sm text-slate-600 max-w-xl leading-relaxed">
+              Comprehensive solutions engineered for precision and exceptional
+              user experience.
+            </p>
+          </div>
+        </ScrollReveal>
+
+        {/* Tab Navigation */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -88,7 +93,7 @@ export default function LuxuryFeaturesRefined() {
           <div className="inline-flex bg-slate-50 rounded-lg p-0.5 border border-slate-200">
             {[
               { key: "user", label: "User Features" },
-              { key: "admin", label: "Administrative" }
+              { key: "admin", label: "Administrative" },
             ].map((tab) => (
               <motion.button
                 key={tab.key}
@@ -105,9 +110,9 @@ export default function LuxuryFeaturesRefined() {
                 {activeTab === tab.key && (
                   <motion.div
                     layoutId="activeTab"
-                    className="absolute inset-0 bg-white rounded-md shadow-sm border border-amber-200/60"
+                    className="absolute inset-0 bg-white rounded-md shadow-sm"
+                    style={{ borderColor: "var(--color-accent-primary)", borderWidth: 1, zIndex: -1 }}
                     transition={{ type: "spring", bounce: 0.1, duration: 0.3 }}
-                    style={{ zIndex: -1 }}
                   />
                 )}
               </motion.button>
@@ -115,7 +120,7 @@ export default function LuxuryFeaturesRefined() {
           </div>
         </motion.div>
 
-        {/* Compact Features Grid */}
+        {/* Features Grid */}
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
@@ -124,59 +129,55 @@ export default function LuxuryFeaturesRefined() {
             animate="visible"
             exit="exit"
           >
-            {features[activeTab as keyof typeof features].map((feature, index) => (
-              <motion.div
-                key={`${activeTab}-${index}`}
-                custom={index}
-                variants={cardVariants}
-                onHoverStart={() => setHoveredIndex(index)}
-                onHoverEnd={() => setHoveredIndex(null)}
-                className="group"
-              >
-                <div className="relative bg-slate-50/60 rounded-xl p-5 border border-slate-200/60 hover:border-amber-200 hover:bg-amber-50/30 transition-all duration-300 h-full">
-                  
-                  {/* Number indicator */}
-                  <div className="absolute top-4 right-4">
-                    <span className="text-xs font-mono text-slate-400">
-                      {String(index + 1).padStart(2, '0')}
-                    </span>
-                  </div>
+            {features[activeTab as keyof typeof features].map(
+              (feature, index) => (
+                <motion.div
+                  key={`${activeTab}-${index}`}
+                  custom={index}
+                  variants={cardVariants}
+                  className="group"
+                >
+                  <TiltCard>
+                    <div className="glass-card rounded-2xl p-5 h-full relative">
+                      <div className="absolute top-4 right-4">
+                        <span className="text-xs font-mono text-slate-400">
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                      </div>
 
-                  {/* Golden accent */}
-                  <motion.div
-                    className="w-1.5 h-1.5 bg-amber-400 rounded-full mb-4"
-                    animate={{
-                      backgroundColor: hoveredIndex === index ? "#f59e0b" : "#fbbf24",
-                      scale: hoveredIndex === index ? 1.2 : 1,
-                    }}
-                    transition={{ duration: 0.2 }}
-                  />
-                  
-                  {/* Content */}
-                  <h3 className="text-slate-900 text-sm font-medium leading-snug mb-4 group-hover:text-amber-800 transition-colors duration-300">
-                    {feature}
-                  </h3>
-                  
-                  {/* Progress indicator */}
-                  <div className="w-full h-px bg-slate-200 rounded-full overflow-hidden">
-                    <motion.div
-                      className="h-full bg-gradient-to-r from-amber-400 to-amber-600 rounded-full"
-                      initial={{ width: "0%" }}
-                      whileInView={{ width: "35%" }}
-                      transition={{ 
-                        duration: 0.8,
-                        delay: index * 0.03,
-                        ease: [0.25, 0.1, 0.25, 1]
-                      }}
-                    />
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+                      <div
+                        className="w-1.5 h-1.5 rounded-full mb-4"
+                        style={{ background: "var(--color-accent-primary)" }}
+                      />
+
+                      <h3 className="text-slate-900 text-sm font-medium leading-snug mb-4">
+                        {feature}
+                      </h3>
+
+                      <div className="w-full h-px bg-slate-200 rounded-full overflow-hidden">
+                        <motion.div
+                          className="h-full rounded-full"
+                          style={{
+                            background:
+                              "linear-gradient(to right, var(--color-accent-primary), var(--color-accent-warm))",
+                          }}
+                          initial={{ width: "0%" }}
+                          whileInView={{ width: "35%" }}
+                          transition={{
+                            duration: 0.8,
+                            delay: index * 0.03,
+                            ease: [0.25, 0.1, 0.25, 1],
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </TiltCard>
+                </motion.div>
+              )
+            )}
           </motion.div>
         </AnimatePresence>
 
-        {/* Minimal footer */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -185,7 +186,10 @@ export default function LuxuryFeaturesRefined() {
         >
           <div className="flex items-center space-x-4 text-xs text-slate-400 tracking-wider">
             <span>ENTERPRISE GRADE</span>
-            <div className="w-1 h-1 bg-amber-400 rounded-full"></div>
+            <div
+              className="w-1 h-1 rounded-full"
+              style={{ background: "var(--color-accent-primary)" }}
+            />
             <span>SCALABLE ARCHITECTURE</span>
           </div>
         </motion.div>

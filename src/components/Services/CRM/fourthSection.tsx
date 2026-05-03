@@ -1,9 +1,17 @@
 import { motion } from "framer-motion";
 import {
-  FileText, Hammer, Puzzle, DatabaseZap,
-  RefreshCw, Headphones
+  FileText,
+  Hammer,
+  Puzzle,
+  DatabaseZap,
+  RefreshCw,
+  Headphones,
 } from "lucide-react";
 import useGoToContactPage from "../../Contact/contactFn";
+import ScrollReveal from "../../../lib/ScrollReveal";
+import TiltCard from "../../../lib/TiltCard";
+import { useMagneticButton } from "../../../lib/useMagneticButton";
+import type { RefObject } from "react";
 
 const services = [
   {
@@ -46,45 +54,75 @@ const services = [
 
 export default function CRMServicesSection() {
   const goContact = useGoToContactPage();
+  const mag = useMagneticButton();
+
   return (
-    <section className="w-full bg-[#fefefe] py-16 px-6 md:px-20">
+    <section className="w-full py-16 px-6 md:px-20">
       {/* Heading */}
-      <div className="text-center max-w-4xl mx-auto mb-14">
-        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-          Elevate Your Business with Our CRM Development Services
-        </h2>
-        <p className="text-lg text-gray-600 font-light">
-          We use an agile, customer-centric approach to provide CRM software that’s strong and flexible—
-          whether you need a single app or an enterprise-grade solution.
-        </p>
-      </div>
+      <ScrollReveal direction="up">
+        <div className="text-center max-w-4xl mx-auto mb-14">
+          <h2 className="text-4xl md:text-5xl font-thin text-gray-900 mb-4">
+            Elevate Your Business with Our{" "}
+            <span
+              className="bg-clip-text text-transparent"
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right, var(--color-accent-primary), var(--color-accent-warm))",
+              }}
+            >
+              CRM Development
+            </span>{" "}
+            Services
+          </h2>
+          <p className="text-lg text-gray-600 font-light">
+            We use an agile, customer-centric approach to provide CRM software
+            that's strong and flexible—whether you need a single app or an
+            enterprise-grade solution.
+          </p>
+        </div>
+      </ScrollReveal>
 
       {/* Service Cards */}
       <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
         {services.map((s, index) => (
-          <motion.div
-            key={index}
-            whileHover={{ y: -4, scale: 1.01 }}
-            transition={{ type: "spring", stiffness: 120 }}
-            className="bg-white shadow-md rounded-xl p-6 flex items-start gap-4 border hover:shadow-xl"
-          >
-            <s.icon className="text-primary" size={32} />
-            <div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-1">{s.title}</h3>
-              <p className="text-sm text-gray-600 font-light">{s.description}</p>
-            </div>
-          </motion.div>
+          <ScrollReveal key={index} direction="up" delay={index * 0.1}>
+            <TiltCard>
+              <div className="glass-card rounded-2xl p-6 flex items-start gap-4 h-full">
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                  style={{ background: "var(--color-accent-primary)" }}
+                >
+                  <s.icon className="text-white" size={20} />
+                </div>
+                <div>
+                  <h3 className="text-xl font-light text-gray-900 mb-1">
+                    {s.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 font-light">{s.description}</p>
+                </div>
+              </div>
+            </TiltCard>
+          </ScrollReveal>
         ))}
       </div>
 
       {/* Final CTA */}
       <div className="text-center mt-16 max-w-3xl mx-auto">
         <p className="text-lg font-medium text-gray-800 mb-2">
-          Join forces with Lazy Do to streamline your business, enhance customer interaction, and grow with confidence.
+          Join forces with Lazy Do to streamline your business, enhance customer
+          interaction, and grow with confidence.
         </p>
-        <button  onClick={goContact} className="mt-4 bg-black text-white px-6 py-3 rounded-full hover:bg-gray-800 transition">
+        <motion.button
+          ref={mag.ref as RefObject<HTMLButtonElement>}
+          style={{ x: mag.x, y: mag.y, background: "var(--color-accent-primary)" }}
+          data-cursor="hover"
+          onClick={goContact}
+          className="mt-4 text-white px-6 py-3 rounded-full font-medium shadow-lg"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.97 }}
+        >
           Let's Build Your CRM
-        </button>
+        </motion.button>
       </div>
     </section>
   );

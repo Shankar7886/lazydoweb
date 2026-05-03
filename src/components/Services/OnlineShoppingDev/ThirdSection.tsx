@@ -51,8 +51,8 @@ const TrackingAnimation = () => (
 );
 
 const ShoppingAppShowcase: React.FC = () => {
-  const [activeFeature, setActiveFeature] = useState<number>(0);
-  const { ref, inView } = useInView({ threshold: 0.1 });
+  const [_activeFeature, setActiveFeature] = useState<number>(0);
+  const { ref } = useInView({ threshold: 0.1 });
 
   const features: Feature[] = [
     {

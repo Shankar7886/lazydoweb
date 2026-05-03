@@ -4,6 +4,7 @@ import { Float } from "@react-three/drei";
 import { motion } from "framer-motion";
 import emailjs from 'emailjs-com';
 import { useMagneticButton } from "../../lib/useMagneticButton";
+import TiltCard from "../../lib/TiltCard";
 import {
   Mail,
   Phone,
@@ -238,61 +239,53 @@ const ContactUs: React.FC = () => {
                 </div>
 
                 <div className="space-y-4">
-                  <div className="flex items-center gap-4 p-4 rounded-lg bg-gradient-to-r from-gray-50 to-white border border-gray-100 hover:border-amber-200 transition-all duration-300">
-                    <div className="w-10 h-10 bg-gradient-to-r from-amber-500 to-yellow-600 rounded-full flex items-center justify-center">
-                      <Mail className="w-5 h-5 text-white" />
+                  <TiltCard>
+                    <div className="glass-card rounded-xl p-6 flex items-center gap-4">
+                      <div className="w-10 h-10 bg-gradient-to-r from-amber-500 to-yellow-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <Mail className="w-5 h-5 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-slate-500 text-sm font-medium">Email</p>
+                        <p className="text-slate-800 font-medium">lazydocorp@gmail.com</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-slate-500 text-sm font-medium">
-                        Email
-                      </p>
-                      <p className="text-slate-800 font-medium">
-                        lazydocorp@gmail.com
-                      </p>
-                    </div>
-                  </div>
+                  </TiltCard>
 
-                  <div className="flex items-center gap-4 p-4 rounded-lg bg-gradient-to-r from-gray-50 to-white border border-gray-100 hover:border-amber-200 transition-all duration-300">
-                    <div className="w-10 h-10 bg-gradient-to-r from-slate-500 to-gray-600 rounded-full flex items-center justify-center">
-                      <Phone className="w-5 h-5 text-white" />
+                  <TiltCard>
+                    <div className="glass-card rounded-xl p-6 flex items-center gap-4">
+                      <div className="w-10 h-10 bg-gradient-to-r from-slate-500 to-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <Phone className="w-5 h-5 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-slate-500 text-sm font-medium">Phone</p>
+                        <p className="text-slate-800 font-medium">(+91) 9667442617</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-slate-500 text-sm font-medium">
-                        Phone
-                      </p>
-                      <p className="text-slate-800 font-medium">
-                        (+91) 9667442617
-                      </p>
-                    </div>
-                  </div>
+                  </TiltCard>
 
-                  <div className="flex items-center gap-4 p-4 rounded-lg bg-gradient-to-r from-gray-50 to-white border border-gray-100 hover:border-amber-200 transition-all duration-300">
-                    <div className="w-10 h-10 bg-gradient-to-r from-amber-600 to-orange-600 rounded-full flex items-center justify-center">
-                      <MapPin className="w-5 h-5 text-white" />
+                  <TiltCard>
+                    <div className="glass-card rounded-xl p-6 flex items-center gap-4">
+                      <div className="w-10 h-10 bg-gradient-to-r from-amber-600 to-orange-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <MapPin className="w-5 h-5 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-slate-500 text-sm font-medium">Address</p>
+                        <p className="text-slate-800 font-medium">Moti Nagar, New Delhi</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-slate-500 text-sm font-medium">
-                        Address
-                      </p>
-                      <p className="text-slate-800 font-medium">
-                        Moti Nagar , New Delhi
-                      </p>
-                    </div>
-                  </div>
+                  </TiltCard>
 
-                  <div className="flex items-center gap-4 p-4 rounded-lg bg-gradient-to-r from-gray-50 to-white border border-gray-100 hover:border-amber-200 transition-all duration-300">
-                    <div className="w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-full flex items-center justify-center">
-                      <Clock className="w-5 h-5 text-white" />
+                  <TiltCard>
+                    <div className="glass-card rounded-xl p-6 flex items-center gap-4">
+                      <div className="w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <Clock className="w-5 h-5 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-slate-500 text-sm font-medium">Hours</p>
+                        <p className="text-slate-800 font-medium">Mon - Fri: 9:00 AM - 6:00 PM</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-slate-500 text-sm font-medium">
-                        Hours
-                      </p>
-                      <p className="text-slate-800 font-medium">
-                        Mon - Fri: 9:00 AM - 6:00 PM
-                      </p>
-                    </div>
-                  </div>
+                  </TiltCard>
                 </div>
               </div>
             </div>
@@ -348,7 +341,7 @@ const ContactUs: React.FC = () => {
                           onChange={handleInputChange}
                           className={`w-full px-4 py-3 bg-white border-2 ${
                             errors.name ? "border-red-300" : "border-gray-200"
-                          } rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 transition-all duration-300`}
+                          } rounded-lg text-slate-800 placeholder-slate-400 focus:ring-2 focus:ring-[var(--color-accent-primary)] focus:outline-none transition-all duration-300`}
                           placeholder="Enter your full name"
                         />
                         {errors.name && (
@@ -371,7 +364,7 @@ const ContactUs: React.FC = () => {
                           onChange={handleInputChange}
                           className={`w-full px-4 py-3 bg-white border-2 ${
                             errors.email ? "border-red-300" : "border-gray-200"
-                          } rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 transition-all duration-300`}
+                          } rounded-lg text-slate-800 placeholder-slate-400 focus:ring-2 focus:ring-[var(--color-accent-primary)] focus:outline-none transition-all duration-300`}
                           placeholder="Enter your email address"
                         />
                         {errors.email && (
@@ -396,7 +389,7 @@ const ContactUs: React.FC = () => {
                           onChange={handleInputChange}
                           className={`w-full px-4 py-3 bg-white border-2 ${
                             errors.phone ? "border-red-300" : "border-gray-200"
-                          } rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 transition-all duration-300`}
+                          } rounded-lg text-slate-800 placeholder-slate-400 focus:ring-2 focus:ring-[var(--color-accent-primary)] focus:outline-none transition-all duration-300`}
                           placeholder="Enter your phone number"
                         />
                         {errors.phone && (
@@ -421,7 +414,7 @@ const ContactUs: React.FC = () => {
                             errors.subject
                               ? "border-red-300"
                               : "border-gray-200"
-                          } rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 transition-all duration-300`}
+                          } rounded-lg text-slate-800 placeholder-slate-400 focus:ring-2 focus:ring-[var(--color-accent-primary)] focus:outline-none transition-all duration-300`}
                           placeholder="What can we help you with?"
                         />
                         {errors.subject && (
@@ -456,7 +449,9 @@ const ContactUs: React.FC = () => {
                       )}
                     </div>
 
-                    <button
+                    <motion.button
+                      ref={mag.ref as React.RefObject<HTMLButtonElement>}
+                      style={{ x: mag.x, y: mag.y }}
                       onClick={handleSubmit}
                       disabled={isSubmitting}
                       className="w-full bg-gradient-to-r from-amber-500 to-yellow-600 text-white font-medium py-4 px-6 rounded-lg hover:from-amber-600 hover:to-yellow-700 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
@@ -472,7 +467,7 @@ const ContactUs: React.FC = () => {
                           Send Message
                         </>
                       )}
-                    </button>
+                    </motion.button>
                   </div>
                 )}
               </div>

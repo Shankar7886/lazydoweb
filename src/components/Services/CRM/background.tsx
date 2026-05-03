@@ -211,7 +211,7 @@ const GridFlowParticles = () => {
         const isHovered = hoveredLine === index;
 
         const material = new THREE.LineBasicMaterial({
-          color: isHovered ? "#6366f1" : "#e5e7eb",
+          color: isHovered ? "#c8392b" : "#e5e7eb",
           transparent: true,
           opacity: isHovered ? 0.8 : 0.2,
         });
@@ -228,9 +228,9 @@ const GridFlowParticles = () => {
             ref={(ref) => (flowingDotRefs.current[index] = ref)}
           >
             <sphereGeometry args={[0.025, 12, 12]} />
-            <meshBasicMaterial 
-              color="#4b5563" 
-              transparent 
+            <meshBasicMaterial
+              color="#c8392b"
+              transparent
               opacity={0.9}
             />
           </mesh>

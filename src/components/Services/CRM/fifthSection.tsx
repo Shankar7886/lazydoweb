@@ -9,6 +9,8 @@ import {
   Download,
   Users,
 } from "lucide-react";
+import ScrollReveal from "../../../lib/ScrollReveal";
+import TiltCard from "../../../lib/TiltCard";
 
 const features = [
   { icon: Settings, title: "System Customization" },
@@ -23,40 +25,46 @@ const features = [
 
 export default function WhyCustomCRMClean() {
   return (
-    <section className="relative w-full bg-[#f9f9f9] py-24 px-6 md:px-20 overflow-hidden">
+    <section className="relative w-full py-24 px-6 md:px-20 overflow-hidden">
       {/* Title */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="text-center mb-16"
-      >
-        <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-4">
-          Why Build a{" "}
-          <span className="bg-gradient-to-r from-yellow-500 via-yellow-400 to-gray-600 bg-clip-text text-transparent">
-            Custom CRM
-          </span>{" "}
-          for Business?
-        </h2>
-        <p className="text-gray-600 text-base max-w-2xl mx-auto">
-          Build smarter systems tailored to your goals with advanced integration,
-          analytics, and security features.
-        </p>
-      </motion.div>
+      <ScrollReveal direction="up">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-thin text-gray-900 leading-tight mb-4">
+            Why Build a{" "}
+            <span
+              className="bg-clip-text text-transparent"
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right, var(--color-accent-primary), var(--color-accent-warm))",
+              }}
+            >
+              Custom CRM
+            </span>{" "}
+            for Business?
+          </h2>
+          <p className="text-gray-600 text-base max-w-2xl mx-auto">
+            Build smarter systems tailored to your goals with advanced
+            integration, analytics, and security features.
+          </p>
+        </div>
+      </ScrollReveal>
 
-      {/* Feature list (icon + text row) */}
-      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+      {/* Feature list */}
+      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
         {features.map((feature, index) => (
-          <motion.div
-            key={feature.title}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1, duration: 0.5 }}
-            className="flex items-start gap-4"
-          >
-            <feature.icon size={28} className="text-yellow-500 mt-1" />
-            <p className="text-lg text-gray-800 font-medium">{feature.title}</p>
-          </motion.div>
+          <ScrollReveal key={feature.title} direction="up" delay={index * 0.1}>
+            <TiltCard>
+              <div className="glass-card rounded-2xl p-5 flex items-center gap-4 h-full">
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                  style={{ background: "var(--color-accent-primary)" }}
+                >
+                  <feature.icon size={20} className="text-white" />
+                </div>
+                <p className="text-lg text-gray-800 font-light">{feature.title}</p>
+              </div>
+            </TiltCard>
+          </ScrollReveal>
         ))}
       </div>
     </section>
